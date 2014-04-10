@@ -1,6 +1,6 @@
 package com.iKeirNez.packetapi.threads;
 
-import com.iKeirNez.packetapi.connections.IConnection;
+import com.iKeirNez.packetapi.implementations.IConnection;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import lombok.Getter;
 

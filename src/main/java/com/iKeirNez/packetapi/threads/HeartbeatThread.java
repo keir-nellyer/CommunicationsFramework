@@ -1,8 +1,8 @@
 package com.iKeirNez.packetapi.threads;
 
 import com.iKeirNez.packetapi.api.HookType;
-import com.iKeirNez.packetapi.connections.IConnectionManager;
-import com.iKeirNez.packetapi.connections.IServerConnection;
+import com.iKeirNez.packetapi.implementations.IConnectionManager;
+import com.iKeirNez.packetapi.implementations.IServerConnection;
 
 import java.util.ArrayList;
 import java.util.Collections;

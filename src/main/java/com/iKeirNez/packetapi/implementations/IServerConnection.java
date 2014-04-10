@@ -1,4 +1,4 @@
-package com.iKeirNez.packetapi.connections;
+package com.iKeirNez.packetapi.implementations;
 
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.ServerConnection;

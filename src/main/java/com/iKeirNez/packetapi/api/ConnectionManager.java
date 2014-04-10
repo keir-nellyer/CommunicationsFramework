@@ -39,7 +39,7 @@ public interface ConnectionManager {
      * Registers an instance as being a listener, any packets received from linked Connection will be passed to applicable methods
      *
      * Methods must have the {@link com.iKeirNez.packetapi.api.packets.PacketHandler} annotation
-     * Methods have an optional first parameter {@link com.iKeirNez.packetapi.connections.IConnection} and a required second parameter implementing {@link com.iKeirNez.packetapi.api.packets.Packet}
+     * Methods have an optional first parameter {@link com.iKeirNez.packetapi.implementations.IConnection} and a required second parameter implementing {@link com.iKeirNez.packetapi.api.packets.Packet}
      *
      * @param packetListener The instance we should register and pass packets to
      */

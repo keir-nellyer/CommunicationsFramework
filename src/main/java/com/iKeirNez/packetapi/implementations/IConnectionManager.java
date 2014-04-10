@@ -1,4 +1,4 @@
-package com.iKeirNez.packetapi.connections;
+package com.iKeirNez.packetapi.implementations;
 
 import com.iKeirNez.packetapi.api.Connection;
 import com.iKeirNez.packetapi.api.ConnectionManager;

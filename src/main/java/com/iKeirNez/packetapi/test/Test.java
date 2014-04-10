@@ -3,8 +3,8 @@ package com.iKeirNez.packetapi.test;
 import com.iKeirNez.packetapi.api.Connection;
 import com.iKeirNez.packetapi.api.ConnectionManager;
 import com.iKeirNez.packetapi.api.HookType;
-import com.iKeirNez.packetapi.connections.IClientConnection;
-import com.iKeirNez.packetapi.connections.IConnectionManager;
+import com.iKeirNez.packetapi.implementations.IClientConnection;
+import com.iKeirNez.packetapi.implementations.IConnectionManager;
 import com.iKeirNez.packetapi.api.packets.PacketHandler;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
 
