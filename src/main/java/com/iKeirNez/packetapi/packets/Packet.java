@@ -1,4 +1,4 @@
-package com.iKeirNez.networking.packets;
+package com.iKeirNez.packetapi.packets;
 
 import java.io.Serializable;
 

@@ -1,7 +1,7 @@
-package com.iKeirNez.networking.threads;
+package com.iKeirNez.packetapi.threads;
 
-import com.iKeirNez.networking.connections.Connection;
-import com.iKeirNez.networking.packets.Packet;
+import com.iKeirNez.packetapi.connections.Connection;
+import com.iKeirNez.packetapi.packets.Packet;
 import lombok.Getter;
 
 import java.io.BufferedOutputStream;

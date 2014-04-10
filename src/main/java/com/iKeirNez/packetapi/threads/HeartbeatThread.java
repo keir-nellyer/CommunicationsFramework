@@ -1,8 +1,8 @@
-package com.iKeirNez.networking.threads;
+package com.iKeirNez.packetapi.threads;
 
-import com.iKeirNez.networking.HookType;
-import com.iKeirNez.networking.connections.ConnectionManager;
-import com.iKeirNez.networking.connections.ServerConnection;
+import com.iKeirNez.packetapi.HookType;
+import com.iKeirNez.packetapi.connections.ConnectionManager;
+import com.iKeirNez.packetapi.connections.ServerConnection;
 
 import java.util.ArrayList;
 import java.util.Collections;

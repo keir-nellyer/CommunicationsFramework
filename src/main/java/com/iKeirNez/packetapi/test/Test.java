@@ -1,12 +1,11 @@
-package com.iKeirNez.networking.test;
+package com.iKeirNez.packetapi.test;
 
-import com.iKeirNez.networking.HookType;
-import com.iKeirNez.networking.connections.ClientConnection;
-import com.iKeirNez.networking.connections.Connection;
-import com.iKeirNez.networking.connections.ConnectionManager;
-import com.iKeirNez.networking.connections.ServerConnection;
-import com.iKeirNez.networking.packets.PacketHandler;
-import com.iKeirNez.networking.packets.PacketListener;
+import com.iKeirNez.packetapi.HookType;
+import com.iKeirNez.packetapi.connections.ClientConnection;
+import com.iKeirNez.packetapi.connections.ConnectionManager;
+import com.iKeirNez.packetapi.connections.ServerConnection;
+import com.iKeirNez.packetapi.packets.PacketHandler;
+import com.iKeirNez.packetapi.packets.PacketListener;
 
 import java.io.IOException;
 

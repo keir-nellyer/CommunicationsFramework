@@ -1,8 +1,8 @@
-package com.iKeirNez.networking.connections;
+package com.iKeirNez.packetapi.connections;
 
-import com.iKeirNez.networking.packets.Packet;
-import com.iKeirNez.networking.threads.IncomingThread;
-import com.iKeirNez.networking.threads.OutgoingThread;
+import com.iKeirNez.packetapi.packets.Packet;
+import com.iKeirNez.packetapi.threads.IncomingThread;
+import com.iKeirNez.packetapi.threads.OutgoingThread;
 import lombok.Getter;
 
 import java.io.IOException;

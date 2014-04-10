@@ -1,14 +1,13 @@
-package com.iKeirNez.networking.threads;
+package com.iKeirNez.packetapi.threads;
 
-import com.iKeirNez.networking.connections.Connection;
-import com.iKeirNez.networking.connections.ConnectionManager;
-import com.iKeirNez.networking.packets.Packet;
+import com.iKeirNez.packetapi.connections.Connection;
+import com.iKeirNez.packetapi.connections.ConnectionManager;
+import com.iKeirNez.packetapi.packets.Packet;
 import lombok.Getter;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.SocketTimeoutException;
 
 /**
  * Created by iKeirNez on 04/04/2014.

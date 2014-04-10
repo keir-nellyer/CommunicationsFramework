@@ -1,9 +1,8 @@
-package com.iKeirNez.networking.connections;
+package com.iKeirNez.packetapi.connections;
 
-import com.iKeirNez.networking.HookType;
-import com.iKeirNez.networking.threads.HeartbeatThread;
-import com.iKeirNez.networking.threads.IncomingThread;
-import com.iKeirNez.networking.threads.OutgoingThread;
+import com.iKeirNez.packetapi.HookType;
+import com.iKeirNez.packetapi.threads.IncomingThread;
+import com.iKeirNez.packetapi.threads.OutgoingThread;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

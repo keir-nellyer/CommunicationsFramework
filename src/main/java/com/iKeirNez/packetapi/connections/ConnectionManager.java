@@ -1,10 +1,10 @@
-package com.iKeirNez.networking.connections;
+package com.iKeirNez.packetapi.connections;
 
-import com.iKeirNez.networking.HookType;
-import com.iKeirNez.networking.packets.Packet;
-import com.iKeirNez.networking.packets.PacketHandler;
-import com.iKeirNez.networking.packets.PacketListener;
-import com.iKeirNez.networking.threads.HeartbeatThread;
+import com.iKeirNez.packetapi.HookType;
+import com.iKeirNez.packetapi.packets.Packet;
+import com.iKeirNez.packetapi.packets.PacketHandler;
+import com.iKeirNez.packetapi.packets.PacketListener;
+import com.iKeirNez.packetapi.threads.HeartbeatThread;
 import lombok.Getter;
 
 import java.io.IOException;
