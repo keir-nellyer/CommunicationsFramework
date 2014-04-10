@@ -5,8 +5,9 @@ import com.iKeirNez.packetapi.threads.IncomingThread;
 import com.iKeirNez.packetapi.threads.OutgoingThread;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
+import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Created by iKeirNez on 04/04/2014.
@@ -14,21 +15,24 @@ import java.net.ServerSocket;
 public class ServerConnection extends Connection {
 
     private ServerSocket serverSocket;
-    private InetSocketAddress inetAddress;
+    private InetAddress inetAddress;
 
     public long lastHeartbeat = System.currentTimeMillis();
     public boolean offline = false;
 
     protected ServerConnection(ConnectionManager connectionManager, String clientAddress, int port) throws IOException {
         super(connectionManager, clientAddress, port);
-        this.inetAddress = new InetSocketAddress(clientAddress, port);
-
+        this.inetAddress = clientAddress != null ? InetAddress.getByName(clientAddress) : null;
         serverSocket = new ServerSocket(port);
 
         new Thread(() -> {
-            while (socket == null && true){ // todo
+            while (socket == null){
                 try {
-                    socket = serverSocket.accept();
+                    Socket tempSocket = serverSocket.accept();
+
+                    if (inetAddress == null || tempSocket.getInetAddress().equals(inetAddress)){ // only allow connection if it comes from specified address
+                        socket = tempSocket;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
