@@ -1,6 +1,7 @@
 package com.iKeirNez.packetapi.connections;
 
-import com.iKeirNez.packetapi.HookType;
+import com.iKeirNez.packetapi.api.ClientConnection;
+import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.threads.IncomingThread;
 import com.iKeirNez.packetapi.threads.OutgoingThread;
 
@@ -10,9 +11,9 @@ import java.net.Socket;
 /**
  * Created by iKeirNez on 04/04/2014.
  */
-public class ClientConnection extends Connection {
+public class IClientConnection extends IConnection implements ClientConnection {
 
-    protected ClientConnection(ConnectionManager connectionManager, String serverAddress, int port) throws IOException {
+    protected IClientConnection(IConnectionManager connectionManager, String serverAddress, int port) throws IOException {
         super(connectionManager, serverAddress, port);
 
         socket = new Socket(serverAddress, port);

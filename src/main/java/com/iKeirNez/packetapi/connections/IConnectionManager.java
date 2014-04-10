@@ -1,11 +1,12 @@
 package com.iKeirNez.packetapi.connections;
 
-import com.iKeirNez.packetapi.HookType;
-import com.iKeirNez.packetapi.packets.Packet;
-import com.iKeirNez.packetapi.packets.PacketHandler;
-import com.iKeirNez.packetapi.packets.PacketListener;
+import com.iKeirNez.packetapi.api.Connection;
+import com.iKeirNez.packetapi.api.ConnectionManager;
+import com.iKeirNez.packetapi.api.HookType;
+import com.iKeirNez.packetapi.api.packets.Packet;
+import com.iKeirNez.packetapi.api.packets.PacketHandler;
+import com.iKeirNez.packetapi.api.packets.PacketListener;
 import com.iKeirNez.packetapi.threads.HeartbeatThread;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -19,26 +20,29 @@ import java.util.function.Consumer;
 /**
  * Created by iKeirNez on 06/04/2014.
  */
-public class ConnectionManager {
+public class IConnectionManager implements ConnectionManager {
 
-    @Getter protected List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
+    protected List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
     private Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
     private Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
 
     private static HeartbeatThread heartbeatThread = new HeartbeatThread();
 
-    public ConnectionManager(){
+    /**
+     * Constructs a new instance
+     */
+    public IConnectionManager(){
         heartbeatThread.addConnectionManager(this);
     }
 
-    public ClientConnection clientConnection(String serverAddress, int port) throws IOException {
-        ClientConnection clientConnection = new ClientConnection(this, serverAddress, port);
+    public IClientConnection newClientConnection(String serverAddress, int port) throws IOException {
+        IClientConnection clientConnection = new IClientConnection(this, serverAddress, port);
         connections.add(clientConnection);
         return clientConnection;
     }
 
-    public ServerConnection serverConnection(String clientAddress, int port) throws IOException {
-        ServerConnection serverConnection = new ServerConnection(this, clientAddress, port);
+    public IServerConnection newServerConnection(String clientAddress, int port) throws IOException {
+        IServerConnection serverConnection = new IServerConnection(this, clientAddress, port);
         connections.add(serverConnection);
         return serverConnection;
     }
@@ -74,7 +78,7 @@ public class ConnectionManager {
         }
     }
 
-    public void callListeners(Connection connection, Packet packet){
+    public void callListeners(IConnection connection, Packet packet){
         if (listeners.containsKey(packet.getClass())){
             for (PacketListener packetListener : listeners.get(packet.getClass())){
                 for (Method method : packetListener.getClass().getMethods()){
@@ -97,7 +101,7 @@ public class ConnectionManager {
 
     private boolean isMethodApplicable(Method method){
         Class<?>[] parameters = method.getParameterTypes();
-        return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && Packet.class.isAssignableFrom(parameters[0])) || (parameters.length == 2 && Connection.class.equals(parameters[0].getClass()) && Packet.class.isAssignableFrom(parameters[1])));
+        return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && Packet.class.isAssignableFrom(parameters[0])) || (parameters.length == 2 && IConnection.class.equals(parameters[0].getClass()) && Packet.class.isAssignableFrom(parameters[1])));
     }
 
     public void addHook(HookType hookType, Consumer<Connection> consumer){
@@ -106,12 +110,16 @@ public class ConnectionManager {
         hooks.put(hookType, list);
     }
 
-    public void callHook(Connection connection, HookType hookType){
+    public void callHook(IConnection connection, HookType hookType){
         if (hooks.containsKey(hookType)){
             for (Consumer<Connection> consumer : hooks.get(hookType)){
                 consumer.accept(connection);
             }
         }
+    }
+
+    public List<Connection> getConnections(){
+        return connections;
     }
 
     @Override

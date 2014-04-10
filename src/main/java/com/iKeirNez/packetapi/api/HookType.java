@@ -1,4 +1,4 @@
-package com.iKeirNez.packetapi;
+package com.iKeirNez.packetapi.api;
 
 /**
  * Created by iKeirNez on 06/04/2014.

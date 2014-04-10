@@ -1,7 +1,7 @@
 package com.iKeirNez.packetapi.threads;
 
-import com.iKeirNez.packetapi.connections.Connection;
-import com.iKeirNez.packetapi.packets.Packet;
+import com.iKeirNez.packetapi.connections.IConnection;
+import com.iKeirNez.packetapi.api.packets.Packet;
 import lombok.Getter;
 
 import java.io.BufferedOutputStream;
@@ -16,10 +16,10 @@ import java.util.concurrent.BlockingQueue;
 public class OutgoingThread extends Thread implements Runnable {
 
     @Getter private boolean running = true, closed = false;
-    private Connection connection;
+    private IConnection connection;
     private BlockingQueue<Packet> packetQueue = new ArrayBlockingQueue<>(1024);
 
-    public OutgoingThread(String title, Connection connection){
+    public OutgoingThread(String title, IConnection connection){
         super(title);
         this.connection = connection;
     }

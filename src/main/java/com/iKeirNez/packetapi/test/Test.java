@@ -1,11 +1,12 @@
 package com.iKeirNez.packetapi.test;
 
-import com.iKeirNez.packetapi.HookType;
-import com.iKeirNez.packetapi.connections.ClientConnection;
-import com.iKeirNez.packetapi.connections.ConnectionManager;
-import com.iKeirNez.packetapi.connections.ServerConnection;
-import com.iKeirNez.packetapi.packets.PacketHandler;
-import com.iKeirNez.packetapi.packets.PacketListener;
+import com.iKeirNez.packetapi.api.Connection;
+import com.iKeirNez.packetapi.api.ConnectionManager;
+import com.iKeirNez.packetapi.api.HookType;
+import com.iKeirNez.packetapi.connections.IClientConnection;
+import com.iKeirNez.packetapi.connections.IConnectionManager;
+import com.iKeirNez.packetapi.api.packets.PacketHandler;
+import com.iKeirNez.packetapi.api.packets.PacketListener;
 
 import java.io.IOException;
 
@@ -14,23 +15,22 @@ import java.io.IOException;
  */
 public class Test implements PacketListener {
 
-    public static ServerConnection serverConnection;
-    public static ClientConnection clientConnection;
+    public static Connection serverConnection, clientConnection;
 
     public static void main(String[] args){
         try {
-            ConnectionManager connectionManager = new ConnectionManager();
+            ConnectionManager connectionManager = new IConnectionManager();
             connectionManager.registerListener(new Test());
-            serverConnection = connectionManager.serverConnection("localhost", 25565);
+            serverConnection = connectionManager.newServerConnection("localhost", 25565);
 
             connectionManager.addHook(HookType.CONNECTED, (c) -> {
-                if (c instanceof ClientConnection){
+                if (c instanceof IClientConnection){
                     System.out.println("Client connected");
                     serverConnection.sendPacket(new TestPacket(555));
                 }
             });
 
-            clientConnection = connectionManager.clientConnection("localhost", 25565);
+            clientConnection = connectionManager.newClientConnection("localhost", 25565);
 
             connectionManager.addHook(HookType.LOST_CONNECTION, (s) -> System.out.println("Lost connection hook"));
 

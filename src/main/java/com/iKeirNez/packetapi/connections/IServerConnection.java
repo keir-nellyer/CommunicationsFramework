@@ -1,6 +1,7 @@
 package com.iKeirNez.packetapi.connections;
 
-import com.iKeirNez.packetapi.HookType;
+import com.iKeirNez.packetapi.api.HookType;
+import com.iKeirNez.packetapi.api.ServerConnection;
 import com.iKeirNez.packetapi.threads.IncomingThread;
 import com.iKeirNez.packetapi.threads.OutgoingThread;
 
@@ -12,7 +13,7 @@ import java.net.Socket;
 /**
  * Created by iKeirNez on 04/04/2014.
  */
-public class ServerConnection extends Connection {
+public class IServerConnection extends IConnection implements ServerConnection {
 
     private ServerSocket serverSocket;
     private InetAddress inetAddress;
@@ -20,7 +21,7 @@ public class ServerConnection extends Connection {
     public long lastHeartbeat = System.currentTimeMillis();
     public boolean offline = false;
 
-    protected ServerConnection(ConnectionManager connectionManager, String clientAddress, int port) throws IOException {
+    protected IServerConnection(IConnectionManager connectionManager, String clientAddress, int port) throws IOException {
         super(connectionManager, clientAddress, port);
         this.inetAddress = clientAddress != null ? InetAddress.getByName(clientAddress) : null;
         serverSocket = new ServerSocket(port);

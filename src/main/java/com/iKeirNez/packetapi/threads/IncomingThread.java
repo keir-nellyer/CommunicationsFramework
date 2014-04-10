@@ -1,8 +1,8 @@
 package com.iKeirNez.packetapi.threads;
 
-import com.iKeirNez.packetapi.connections.Connection;
-import com.iKeirNez.packetapi.connections.ConnectionManager;
-import com.iKeirNez.packetapi.packets.Packet;
+import com.iKeirNez.packetapi.connections.IConnection;
+import com.iKeirNez.packetapi.connections.IConnectionManager;
+import com.iKeirNez.packetapi.api.packets.Packet;
 import lombok.Getter;
 
 import java.io.BufferedInputStream;
@@ -15,10 +15,10 @@ import java.io.ObjectInputStream;
 public class IncomingThread extends Thread implements Runnable {
 
     @Getter private boolean running = true, closed = false;
-    private ConnectionManager connectionManager;
-    private Connection connection;
+    private IConnectionManager connectionManager;
+    private IConnection connection;
 
-    public IncomingThread(String title, ConnectionManager connectionManager, Connection connection){
+    public IncomingThread(String title, IConnectionManager connectionManager, IConnection connection){
         super(title);
         this.connectionManager = connectionManager;
         this.connection = connection;

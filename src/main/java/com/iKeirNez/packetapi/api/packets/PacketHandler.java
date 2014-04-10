@@ -1,4 +1,4 @@
-package com.iKeirNez.packetapi.packets;
+package com.iKeirNez.packetapi.api.packets;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

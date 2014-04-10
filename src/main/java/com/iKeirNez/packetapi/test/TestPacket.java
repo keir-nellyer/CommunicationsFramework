@@ -1,6 +1,6 @@
 package com.iKeirNez.packetapi.test;
 
-import com.iKeirNez.packetapi.packets.Packet;
+import com.iKeirNez.packetapi.api.packets.Packet;
 
 /**
  * Created by iKeirNez on 06/04/2014.
