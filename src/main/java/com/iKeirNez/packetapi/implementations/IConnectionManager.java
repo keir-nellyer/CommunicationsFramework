@@ -82,7 +82,7 @@ public class IConnectionManager implements ConnectionManager {
         if (listeners.containsKey(packet.getClass())){
             for (PacketListener packetListener : listeners.get(packet.getClass())){
                 for (Method method : packetListener.getClass().getMethods()){
-                    if (isMethodApplicable(method)){
+                    if (isMethodApplicable(packet, method)){
                         try {
                             if (method.getParameterCount() == 2){
                                 method.invoke(packetListener, connection, packet);
@@ -97,6 +97,11 @@ public class IConnectionManager implements ConnectionManager {
                 }
             }
         }
+    }
+
+    private boolean isMethodApplicable(Packet packet, Method method){
+        Class<?>[] parameters = method.getParameterTypes();
+        return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && packet.getClass().isAssignableFrom(parameters[0])) || (parameters.length == 2 && IConnection.class.equals(parameters[0].getClass()) && packet.getClass().isAssignableFrom(parameters[1])));
     }
 
     private boolean isMethodApplicable(Method method){
