@@ -90,7 +90,7 @@ public class IConnectionManager implements ConnectionManager {
                                 method.invoke(packetListener, packet);
                             }
                         } catch (Throwable e) {
-                            System.out.println("Error whilst invoking listeners");
+                            System.out.println("Error whilst invoking listener\nPacket: " + packet.getClass().getName() + "\nMethod: " + packetListener.getClass().getName() + "#" + method.getName());
                             e.printStackTrace();
                         }
                     }
