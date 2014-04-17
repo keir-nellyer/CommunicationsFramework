@@ -94,6 +94,7 @@ public class IConnectionManager implements ConnectionManager {
                             e.printStackTrace();
                         }
                     } else if (method.isAnnotationPresent(PacketHandler.class)){
+                        System.out.println(packetListener.getClass() + "#" + method.getName());
                         System.out.println("WARNING: Method has @PacketHandler annotation but does not take the correct parameters");
                     }
                 }
