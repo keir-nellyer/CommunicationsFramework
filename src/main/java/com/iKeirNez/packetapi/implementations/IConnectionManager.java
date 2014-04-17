@@ -54,6 +54,9 @@ public class IConnectionManager implements ConnectionManager {
                 List<PacketListener> list = listeners.getOrDefault(parameter, new ArrayList<>());
                 list.add(packetListener);
                 listeners.put(parameter, list);
+            } else if (method.isAnnotationPresent(PacketHandler.class)){
+                System.out.println(packetListener.getClass() + "#" + method.getName());
+                System.out.println("WARNING: Method has @PacketHandler annotation but does not take the correct parameters");
             }
         }
     }
@@ -93,9 +96,6 @@ public class IConnectionManager implements ConnectionManager {
                             System.out.println("Error whilst invoking listener\nPacket: " + packet.getClass().getName() + "\nMethod: " + packetListener.getClass().getName() + "#" + method.getName());
                             e.printStackTrace();
                         }
-                    } else if (method.isAnnotationPresent(PacketHandler.class)){
-                        System.out.println(packetListener.getClass() + "#" + method.getName());
-                        System.out.println("WARNING: Method has @PacketHandler annotation but does not take the correct parameters");
                     }
                 }
             }
