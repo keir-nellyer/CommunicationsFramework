@@ -101,12 +101,12 @@ public class IConnectionManager implements ConnectionManager {
 
     private boolean isMethodApplicable(Packet packet, Method method){
         Class<?>[] parameters = method.getParameterTypes();
-        return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && packet.getClass().isAssignableFrom(parameters[0])) || (parameters.length == 2 && IConnection.class.equals(parameters[0].getClass()) && packet.getClass().isAssignableFrom(parameters[1])));
+        return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && packet.getClass().isAssignableFrom(parameters[0])) || (parameters.length == 2 && Connection.class.equals(parameters[0].getClass()) && packet.getClass().isAssignableFrom(parameters[1])));
     }
 
     private boolean isMethodApplicable(Method method){
         Class<?>[] parameters = method.getParameterTypes();
-        return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && Packet.class.isAssignableFrom(parameters[0])) || (parameters.length == 2 && IConnection.class.equals(parameters[0].getClass()) && Packet.class.isAssignableFrom(parameters[1])));
+        return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && Packet.class.isAssignableFrom(parameters[0])) || (parameters.length == 2 && Connection.class.equals(parameters[0].getClass()) && Packet.class.isAssignableFrom(parameters[1])));
     }
 
     public void addHook(HookType hookType, Consumer<Connection> consumer){
