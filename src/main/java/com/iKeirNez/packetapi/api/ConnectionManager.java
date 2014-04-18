@@ -1,5 +1,8 @@
 package com.iKeirNez.packetapi.api;
 
+import com.iKeirNez.packetapi.api.connections.ClientConnection;
+import com.iKeirNez.packetapi.api.connections.Connection;
+import com.iKeirNez.packetapi.api.connections.ServerConnection;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package com.iKeirNez.packetapi.implementations;
 
-import com.iKeirNez.packetapi.api.Connection;
+import com.iKeirNez.packetapi.api.connections.Connection;
 import com.iKeirNez.packetapi.api.ConnectionManager;
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
