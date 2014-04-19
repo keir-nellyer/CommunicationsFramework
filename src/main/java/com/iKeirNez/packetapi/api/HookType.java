@@ -5,6 +5,6 @@ package com.iKeirNez.packetapi.api;
  */
 public enum HookType {
 
-    CONNECTED, LOST_CONNECTION;
+    CONNECTED, LOST_CONNECTION, RECONNECTED
 
 }

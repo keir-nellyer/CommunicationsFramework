@@ -1,19 +1,11 @@
-package com.iKeirNez.packetapi.api;
+package com.iKeirNez.packetapi.api.connection;
 
 import com.iKeirNez.packetapi.api.packets.Packet;
-
-import java.net.Socket;
 
 /**
  * Created by iKeirNez on 10/04/2014.
  */
 public interface Connection {
-
-    /**
-     * Gets the associated socket
-     * @return The associated socket
-     */
-    public Socket getSocket();
 
     /**
      * Gets the connected state of this connection
@@ -42,6 +34,6 @@ public interface Connection {
     /**
      * Gracefully closes all threads and sockets associated with this connection
      */
-    public void close();
+    public void close() throws InterruptedException;
 
 }

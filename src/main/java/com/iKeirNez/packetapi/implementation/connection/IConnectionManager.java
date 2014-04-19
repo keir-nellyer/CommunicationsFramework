@@ -1,14 +1,12 @@
-package com.iKeirNez.packetapi.implementations;
+package com.iKeirNez.packetapi.implementation.connection;
 
-import com.iKeirNez.packetapi.api.Connection;
-import com.iKeirNez.packetapi.api.ConnectionManager;
+import com.iKeirNez.packetapi.api.connection.Connection;
+import com.iKeirNez.packetapi.api.connection.ConnectionManager;
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.api.packets.PacketHandler;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
-import com.iKeirNez.packetapi.threads.HeartbeatThread;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,22 +24,13 @@ public class IConnectionManager implements ConnectionManager {
     private Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
     private Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
 
-    private static HeartbeatThread heartbeatThread = new HeartbeatThread();
-
-    /**
-     * Constructs a new instance
-     */
-    public IConnectionManager(){
-        heartbeatThread.addConnectionManager(this);
-    }
-
-    public IClientConnection newClientConnection(String serverAddress, int port) throws IOException {
+    public IClientConnection newClientConnection(String serverAddress, int port) throws Exception {
         IClientConnection clientConnection = new IClientConnection(this, serverAddress, port);
         connections.add(clientConnection);
         return clientConnection;
     }
 
-    public IServerConnection newServerConnection(String clientAddress, int port) throws IOException {
+    public IServerConnection newServerConnection(String clientAddress, int port) throws Exception {
         IServerConnection serverConnection = new IServerConnection(this, clientAddress, port);
         connections.add(serverConnection);
         return serverConnection;
@@ -136,7 +125,6 @@ public class IConnectionManager implements ConnectionManager {
 
     @Override
     protected void finalize() throws Throwable {
-        heartbeatThread.removeConnectionManager(this);
         super.finalize();
     }
 
