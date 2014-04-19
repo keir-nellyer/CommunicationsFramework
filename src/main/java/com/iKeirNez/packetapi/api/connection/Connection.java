@@ -28,8 +28,17 @@ public interface Connection {
     /**
      * Sends a packet via this connection to the other side
      * @param packet The packet instance to send
+     * @param queueIfNotConnected If this connection is not currently connected (lost connection or initialising connection) defaults to true
      */
-    public void sendPacket(Packet packet);
+    public void sendPacket(Packet packet, boolean queueIfNotConnected);
+
+    /**
+     * Sends a packet via this connection to the other side
+     * @param packet The packet instance to send
+     */
+    public default void sendPacket(Packet packet){
+        sendPacket(packet, true);
+    }
 
     /**
      * Gracefully closes all threads and sockets associated with this connection

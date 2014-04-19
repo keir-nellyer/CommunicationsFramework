@@ -35,9 +35,12 @@ public abstract class IConnection implements Connection {
         return connectionHandler.connected();
     }
 
-    public void sendPacket(Packet packet){
+    public void sendPacket(Packet packet, boolean queueIfNotConnected){
         if (!isConnected()){
-            connectQueue.add(packet);
+            if (queueIfNotConnected){
+                connectQueue.add(packet);
+            }
+
             return;
         }
 
