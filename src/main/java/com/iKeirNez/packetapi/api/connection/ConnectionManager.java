@@ -1,8 +1,6 @@
-package com.iKeirNez.packetapi.api;
+package com.iKeirNez.packetapi.api.connection;
 
-import com.iKeirNez.packetapi.api.connections.ClientConnection;
-import com.iKeirNez.packetapi.api.connections.Connection;
-import com.iKeirNez.packetapi.api.connections.ServerConnection;
+import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public interface ConnectionManager {
      * @return The Client Connection
      * @throws java.io.IOException Thrown if anything goes wrong during construction
      */
-    public ClientConnection newClientConnection(String serverAddress, int port) throws IOException;
+    public ClientConnection newClientConnection(String serverAddress, int port) throws Exception;
 
     /**
      * Returns a new instance of a server connection
@@ -36,13 +34,13 @@ public interface ConnectionManager {
      * @return The Server Connection
      * @throws IOException Thrown if anything goes wrong during construction
      */
-    public ServerConnection newServerConnection(String clientAddress, int port) throws IOException;
+    public ServerConnection newServerConnection(String clientAddress, int port) throws Exception;
 
     /**
      * Registers an instance as being a listener, any packets received from linked Connection will be passed to applicable methods
      *
      * Methods must have the {@link com.iKeirNez.packetapi.api.packets.PacketHandler} annotation
-     * Methods have an optional first parameter {@link com.iKeirNez.packetapi.implementations.IConnection} and a required second parameter implementing {@link com.iKeirNez.packetapi.api.packets.Packet}
+     * Methods have an optional first parameter {@link com.iKeirNez.packetapi.implementation.connection.IConnection} and a required second parameter implementing {@link com.iKeirNez.packetapi.api.packets.Packet}
      *
      * @param packetListener The instance we should register and pass packets to
      */
