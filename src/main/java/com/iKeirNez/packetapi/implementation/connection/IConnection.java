@@ -18,7 +18,7 @@ public abstract class IConnection implements Connection {
     @Getter private String address;
     @Getter private int port;
 
-    protected ConnectionHandler connectionHandler = null;
+    public ConnectionHandler connectionHandler = null;
     public Logger logger;
     public boolean firstConnect = true;
     public List<Packet> connectQueue = new ArrayList<>(); // packets to be sent when connection is (re)gained
