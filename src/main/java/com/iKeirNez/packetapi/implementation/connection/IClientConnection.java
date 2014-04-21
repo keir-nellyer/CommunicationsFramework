@@ -8,6 +8,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.net.ConnectException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,7 +33,11 @@ public class IClientConnection extends IConnection implements ClientConnection {
     public void init(){
         bootstrap.connect().addListener((ChannelFuture f) -> {
             if (!f.isSuccess()){
-                f.channel().eventLoop().schedule((Runnable) bootstrap::connect, 5, TimeUnit.SECONDS);
+                if (f.cause() instanceof ConnectException){
+                    f.channel().eventLoop().schedule((Runnable) bootstrap::connect, 5, TimeUnit.SECONDS);
+                } else {
+                    throw new Exception("Error whilst connecting to " + getAddress() + ":" + getPort(), f.cause());
+                }
             }
         });
     }

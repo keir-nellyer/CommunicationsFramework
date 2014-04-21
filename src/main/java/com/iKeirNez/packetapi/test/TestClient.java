@@ -7,8 +7,6 @@ import com.iKeirNez.packetapi.implementation.connection.IConnectionManager;
 import com.iKeirNez.packetapi.api.packets.PacketHandler;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
 
-import java.net.ConnectException;
-
 /**
  * Created by iKeirNez on 06/04/2014.
  */
@@ -26,12 +24,7 @@ public class TestClient implements PacketListener {
             });
 
 
-            while (serverConnection == null){
-                try {
-                    serverConnection = connectionManager.newClientConnection("localhost", 25565);
-                } catch (ConnectException e){}
-            }
-
+            serverConnection = connectionManager.newClientConnection("localhost", 25565);
             connectionManager.addHook(HookType.LOST_CONNECTION, (s) -> System.out.println("Lost connection hook"));
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,6 +3,7 @@ package com.iKeirNez.packetapi.implementation.connection;
 import com.iKeirNez.packetapi.api.connection.ServerConnection;
 import com.iKeirNez.packetapi.implementation.handlers.StandardInitializer;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -28,7 +29,11 @@ public class IServerConnection extends IConnection implements ServerConnection {
     }
 
     public void init(){
-        serverBootstrap.bind();
+        serverBootstrap.bind().addListener((ChannelFuture f) -> {
+            if (!f.isSuccess()){
+                throw new Exception("Error whilst connecting to " + getAddress() + ":" + getPort(), f.cause());
+            }
+        });
     }
 
     @Override
