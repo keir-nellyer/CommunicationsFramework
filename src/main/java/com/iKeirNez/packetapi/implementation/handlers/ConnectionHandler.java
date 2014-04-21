@@ -3,13 +3,13 @@ package com.iKeirNez.packetapi.implementation.handlers;
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.implementation.connection.IConnection;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
  * Created by iKeirNez on 18/04/2014.
  */
-public class ConnectionHandler extends ChannelHandlerAdapter {
+public class ConnectionHandler extends ChannelInboundHandlerAdapter {
 
     private IConnection connection;
     private ChannelHandlerContext ctx;
