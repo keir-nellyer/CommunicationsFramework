@@ -27,12 +27,6 @@
                             <include>io.netty:netty-all</include>
                         </includes>
                     </artifactSet>
-                    <relocations>
-                        <relocation>
-                            <pattern>io.netty</pattern>
-                            <shadedPattern>com.iKeirNez.packetapi.libraries.io.netty</shadedPattern>
-                        </relocation>
-                    </relocations>
                 </configuration>
             </plugin>
         </plugins>
