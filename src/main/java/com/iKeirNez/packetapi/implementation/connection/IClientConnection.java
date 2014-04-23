@@ -27,14 +27,14 @@ public class IClientConnection extends IConnection implements ClientConnection {
                 .handler(new StandardInitializer(this))
                 .remoteAddress(serverAddress, port);
 
-        init();
+        handleReconnect();
     }
 
-    public void init(){
+    public void handleReconnect(){
         bootstrap.connect().addListener((ChannelFuture f) -> {
             if (!f.isSuccess()){
                 if (f.cause() instanceof ConnectException){
-                    f.channel().eventLoop().schedule((Runnable) bootstrap::connect, 5, TimeUnit.SECONDS);
+                    f.channel().eventLoop().schedule((Runnable) this::handleReconnect, 1, TimeUnit.SECONDS);
                 } else {
                     throw new Exception("Error whilst connecting to " + getAddress() + ":" + getPort(), f.cause());
                 }

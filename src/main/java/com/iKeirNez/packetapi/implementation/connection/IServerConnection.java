@@ -25,15 +25,15 @@ public class IServerConnection extends IConnection implements ServerConnection {
                 .childHandler(new StandardInitializer(this))
                 .localAddress(clientAddress, port);
 
-        init();
-    }
-
-    public void init(){
         serverBootstrap.bind().addListener((ChannelFuture f) -> {
             if (!f.isSuccess()){
                 throw new Exception("Error whilst connecting to " + getAddress() + ":" + getPort(), f.cause());
             }
         });
+    }
+
+    public void handleReconnect(){
+        // no use here
     }
 
     @Override

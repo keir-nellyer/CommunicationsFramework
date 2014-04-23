@@ -25,7 +25,7 @@ public class StandardInitializer extends ChannelInitializer<SocketChannel> {
 
         socketChannel.pipeline().addLast(
                 new ObjectEncoder(),
-                new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                new ObjectDecoder(ClassResolvers.weakCachingResolver(connection.getConnectionManager().classLoader)),
                 connection.connectionHandler,
                 new IdleStateHandler(5000, 0, 0),
                 new ReconnectHandler(connection));

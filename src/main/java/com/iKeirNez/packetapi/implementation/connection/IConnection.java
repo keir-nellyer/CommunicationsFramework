@@ -47,7 +47,7 @@ public abstract class IConnection implements Connection {
         connectionHandler.send(packet);
     }
 
-    public abstract void init();
+    public abstract void handleReconnect();
 
     public void close() throws InterruptedException {
         connectionManager.connections.remove(this);

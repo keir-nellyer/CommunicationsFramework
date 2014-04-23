@@ -23,6 +23,6 @@ public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx){
         connection.logger.warning("Lost connection, attempting reconnect...");
-        connection.init();
+        connection.handleReconnect();
     }
 }

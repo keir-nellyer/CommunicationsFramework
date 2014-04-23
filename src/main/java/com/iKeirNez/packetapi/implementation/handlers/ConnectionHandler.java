@@ -6,6 +6,8 @@ import com.iKeirNez.packetapi.implementation.connection.IConnection;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.util.logging.Level;
+
 /**
  * Created by iKeirNez on 18/04/2014.
  */
@@ -46,7 +48,7 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        //connection.logger.log(Level.WARNING, "Unexpected exception from downstream.", cause);
+        connection.logger.log(Level.SEVERE, "Unexpected exception from downstream, disconnecting...", cause);
         ctx.close();
     }
 

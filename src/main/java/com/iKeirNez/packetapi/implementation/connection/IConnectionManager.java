@@ -23,6 +23,11 @@ public class IConnectionManager implements ConnectionManager {
     protected List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
     private Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
     private Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
+    public ClassLoader classLoader;
+
+    public IConnectionManager(ClassLoader classLoader){
+        this.classLoader = classLoader;
+    }
 
     public IClientConnection newClientConnection(String serverAddress, int port) throws Exception {
         IClientConnection clientConnection = new IClientConnection(this, serverAddress, port);
