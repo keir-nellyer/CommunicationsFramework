@@ -1,5 +1,6 @@
 package com.iKeirNez.packetapi.implementation.handlers;
 
+import com.iKeirNez.packetapi.implementation.connection.IClientConnection;
 import com.iKeirNez.packetapi.implementation.connection.IConnection;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -22,7 +23,11 @@ public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx){
-        connection.logger.warning("Lost connection, attempting reconnect...");
-        connection.handleReconnect();
+        if (connection instanceof IClientConnection){
+            connection.logger.warning("Lost connection, attempting reconnect...");
+            ((IClientConnection) connection).connect();
+        } else {
+            connection.logger.warning("Lost connection, listening for reconnect...");
+        }
     }
 }

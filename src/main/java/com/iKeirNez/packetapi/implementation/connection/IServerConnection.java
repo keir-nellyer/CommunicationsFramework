@@ -32,10 +32,6 @@ public class IServerConnection extends IConnection implements ServerConnection {
         });
     }
 
-    public void handleReconnect(){
-        // no use here
-    }
-
     @Override
     public void close() throws InterruptedException {
         bossGroup.shutdownGracefully().sync();
