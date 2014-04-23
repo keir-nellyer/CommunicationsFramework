@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class IClientConnection extends IConnection implements ClientConnection {
 
-    private EventLoopGroup group = new NioEventLoopGroup();
-    public Bootstrap bootstrap = new Bootstrap();
+    private final EventLoopGroup group = new NioEventLoopGroup();
+    private final Bootstrap bootstrap = new Bootstrap();
 
-    protected IClientConnection(IConnectionManager connectionManager, String serverAddress, int port) throws Exception {
+    protected IClientConnection(IConnectionManager connectionManager, String serverAddress, int port){
         super(connectionManager, serverAddress, port);
 
         bootstrap.group(group)

@@ -20,22 +20,22 @@ import java.util.function.Consumer;
  */
 public class IConnectionManager implements ConnectionManager {
 
-    protected List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
-    private Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
-    private Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
-    public ClassLoader classLoader;
+    protected final List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
+    private final Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
+    private final Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
+    public final ClassLoader classLoader;
 
     public IConnectionManager(ClassLoader classLoader){
         this.classLoader = classLoader;
     }
 
-    public IClientConnection newClientConnection(String serverAddress, int port) throws Exception {
+    public IClientConnection newClientConnection(String serverAddress, int port){
         IClientConnection clientConnection = new IClientConnection(this, serverAddress, port);
         connections.add(clientConnection);
         return clientConnection;
     }
 
-    public IServerConnection newServerConnection(String clientAddress, int port) throws Exception {
+    public IServerConnection newServerConnection(String clientAddress, int port){
         IServerConnection serverConnection = new IServerConnection(this, clientAddress, port);
         connections.add(serverConnection);
         return serverConnection;
@@ -126,11 +126,6 @@ public class IConnectionManager implements ConnectionManager {
 
     public List<Connection> getConnections(){
         return connections;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
     }
 
 }

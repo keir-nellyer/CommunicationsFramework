@@ -13,11 +13,11 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  */
 public class IServerConnection extends IConnection implements ServerConnection {
 
-    private EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-    private EventLoopGroup workerGroup = new NioEventLoopGroup();
-    private ServerBootstrap serverBootstrap = new ServerBootstrap();
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+    private final ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-    protected IServerConnection(IConnectionManager connectionManager, String clientAddress, int port) throws Exception {
+    protected IServerConnection(IConnectionManager connectionManager, String clientAddress, int port){
         super(connectionManager, clientAddress, port);
 
         serverBootstrap.group(bossGroup, workerGroup)

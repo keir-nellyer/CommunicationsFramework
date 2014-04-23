@@ -14,14 +14,14 @@ import java.util.logging.Logger;
  */
 public abstract class IConnection implements Connection {
 
-    @Getter protected IConnectionManager connectionManager;
-    @Getter private String address;
-    @Getter private int port;
+    @Getter protected final IConnectionManager connectionManager;
+    @Getter private final String address;
+    @Getter private final int port;
 
     public ConnectionHandler connectionHandler = null;
-    public Logger logger;
+    public final Logger logger;
     public boolean firstConnect = true;
-    public List<Packet> connectQueue = new ArrayList<>(); // packets to be sent when connection is (re)gained
+    public final List<Packet> connectQueue = new ArrayList<>(); // packets to be sent when connection is (re)gained
 
     protected IConnection(IConnectionManager connectionManager, String address, int port){
         this.connectionManager = connectionManager;

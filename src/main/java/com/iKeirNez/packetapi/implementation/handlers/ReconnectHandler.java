@@ -10,7 +10,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
 
-    private IConnection connection;
+    private final IConnection connection;
 
     public ReconnectHandler(IConnection connection){
         this.connection = connection;

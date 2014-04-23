@@ -13,7 +13,7 @@ import io.netty.handler.timeout.IdleStateHandler;
  */
 public class StandardInitializer extends ChannelInitializer<SocketChannel> {
 
-    public IConnection connection;
+    private final IConnection connection;
 
     public StandardInitializer(IConnection connection){
         this.connection = connection;

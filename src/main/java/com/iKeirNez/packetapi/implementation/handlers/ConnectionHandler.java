@@ -13,7 +13,7 @@ import java.util.logging.Level;
  */
 public class ConnectionHandler extends ChannelInboundHandlerAdapter {
 
-    private IConnection connection;
+    private final IConnection connection;
     private ChannelHandlerContext ctx;
 
     public ConnectionHandler(IConnection connection){
