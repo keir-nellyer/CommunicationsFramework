@@ -6,6 +6,7 @@ import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.api.packets.PacketHandler;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
+import java.lang.IllegalArgumentException;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -49,8 +50,7 @@ public class IConnectionManager implements ConnectionManager {
                 list.add(packetListener);
                 listeners.put(parameter, list);
             } else if (method.isAnnotationPresent(PacketHandler.class)){
-                System.out.println(packetListener.getClass() + "#" + method.getName());
-                System.out.println("WARNING: Method has @PacketHandler annotation but does not take the correct parameters");
+                throw new IllegalArgumentException("Method " + packetListener.getClass() + "#" + method.getName() + " has @PacketHandler annotation but does not take the correct parameters");
             }
         }
     }
