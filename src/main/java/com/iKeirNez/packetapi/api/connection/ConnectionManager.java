@@ -2,6 +2,7 @@ package com.iKeirNez.packetapi.api.connection;
 
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
+import com.iKeirNez.packetapi.implementation.connection.IConnectionManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,6 +12,15 @@ import java.util.function.Consumer;
  * Created by iKeirNez on 10/04/2014.
  */
 public interface ConnectionManager {
+
+    /**
+     * Returns a new instance of this class
+     * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
+     * @return The new instance
+     */
+    public static ConnectionManager getNewInstance(ClassLoader classLoader){
+        return new IConnectionManager(classLoader); // this should be our only ever reference to the internals from the API
+    }
 
     /**
      * Gets the connections associated with this manager

@@ -26,6 +26,9 @@ public class IConnectionManager implements ConnectionManager {
     private final Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
     public final ClassLoader classLoader;
 
+    /**
+     * @deprecated see {@link com.iKeirNez.packetapi.api.connection.ConnectionManager#getNewInstance(ClassLoader)}
+     */
     public IConnectionManager(ClassLoader classLoader){
         this.classLoader = classLoader;
     }
