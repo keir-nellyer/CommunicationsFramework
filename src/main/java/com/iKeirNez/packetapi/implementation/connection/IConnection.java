@@ -23,13 +23,14 @@ public abstract class IConnection implements Connection {
     public final Logger logger;
     public boolean firstConnect = true;
     public final List<Packet> connectQueue = new ArrayList<>(); // packets to be sent when connection is (re)gained
-    public boolean closing = false;
+    public boolean closing = false, expectingDisconnect = false;
 
     protected IConnection(IConnectionManager connectionManager, String address, int port){
         this.connectionManager = connectionManager;
         this.address = address;
         this.port = port;
 
+        connectionManager.connections.add(this);
         logger = Logger.getLogger("Connection (" + address + ":" + port + ")");
     }
 

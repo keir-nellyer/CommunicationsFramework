@@ -3,6 +3,7 @@ package com.iKeirNez.packetapi.implementation.handlers;
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.implementation.connection.IConnection;
+import com.iKeirNez.packetapi.implementation.packets.PacketDisconnect;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -40,7 +41,13 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object object) throws Exception {
-        connection.getConnectionManager().callListeners(connection, (Packet) object);
+        Packet packet = (Packet) object;
+
+        if (packet instanceof PacketDisconnect){
+            connection.expectingDisconnect = true;
+        } else {
+            connection.getConnectionManager().callListeners(connection, packet);
+        }
     }
 
     @Override
@@ -50,7 +57,11 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        connection.logger.log(Level.SEVERE, "Unexpected exception from downstream, disconnecting...", cause);
+        if (!connection.expectingDisconnect){ // disconnecting causes some mean looking errors, lets suppress them
+            connection.logger.log(Level.SEVERE, "Unexpected exception from downstream, disconnecting...", cause);
+            connection.expectingDisconnect = false;
+        }
+
         ctx.close();
     }
 
@@ -69,7 +80,8 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
     @Override
     public void close() throws IOException {
         if (ctx != null){
-            ctx.disconnect().syncUninterruptibly();
+            send(new PacketDisconnect());
+            ctx.channel().disconnect().syncUninterruptibly();
         }
     }
 

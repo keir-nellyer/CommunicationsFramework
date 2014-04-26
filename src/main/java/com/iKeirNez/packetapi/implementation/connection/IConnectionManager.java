@@ -13,7 +13,6 @@ import java.lang.IllegalArgumentException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,15 +36,11 @@ public class IConnectionManager implements ConnectionManager {
     }
 
     public IClientConnection newClientConnection(String serverAddress, int port){
-        IClientConnection clientConnection = new IClientConnection(this, serverAddress, port);
-        connections.add(clientConnection);
-        return clientConnection;
+        return new IClientConnection(this, serverAddress, port);
     }
 
     public IServerConnection newServerConnection(String clientAddress, int port){
-        IServerConnection serverConnection = new IServerConnection(this, clientAddress, port);
-        connections.add(serverConnection);
-        return serverConnection;
+        return new IServerConnection(this, clientAddress, port);
     }
 
     public void registerListener(PacketListener packetListener){
@@ -136,9 +131,8 @@ public class IConnectionManager implements ConnectionManager {
 
     @Override
     public void close() throws IOException {
-        Iterator<Connection> iterator = connections.iterator();
-        while (iterator.hasNext()){
-            iterator.next().close();
+        for (Connection connection : new ArrayList<>(connections)){ // create copy so we don't get Concurrent issues
+            connection.close();
         }
     }
 
