@@ -23,11 +23,13 @@ public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx){
-        if (connection instanceof IClientConnection){
-            connection.logger.warning("Lost connection, attempting reconnect...");
-            ((IClientConnection) connection).connect();
-        } else {
-            connection.logger.warning("Lost connection, listening for reconnect...");
+        if (!connection.closing){
+            if (connection instanceof IClientConnection){
+                connection.logger.warning("Lost connection, attempting reconnect...");
+                ((IClientConnection) connection).connect();
+            } else {
+                connection.logger.warning("Lost connection, listening for reconnect...");
+            }
         }
     }
 }

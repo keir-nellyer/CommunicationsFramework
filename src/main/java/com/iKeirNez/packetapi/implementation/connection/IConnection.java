@@ -23,6 +23,7 @@ public abstract class IConnection implements Connection {
     public final Logger logger;
     public boolean firstConnect = true;
     public final List<Packet> connectQueue = new ArrayList<>(); // packets to be sent when connection is (re)gained
+    public boolean closing = false;
 
     protected IConnection(IConnectionManager connectionManager, String address, int port){
         this.connectionManager = connectionManager;
@@ -49,6 +50,7 @@ public abstract class IConnection implements Connection {
     }
 
     public void close() throws IOException {
+        closing = true;
         connectionManager.connections.remove(this);
         connectionHandler.close();
     }

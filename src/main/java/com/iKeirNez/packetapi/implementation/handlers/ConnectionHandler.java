@@ -16,7 +16,7 @@ import java.util.logging.Level;
 public class ConnectionHandler extends ChannelInboundHandlerAdapter implements Closeable {
 
     private final IConnection connection;
-    private ChannelHandlerContext ctx;
+    private ChannelHandlerContext ctx = null;
 
     public ConnectionHandler(IConnection connection){
         this.connection = connection;
@@ -68,7 +68,9 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
 
     @Override
     public void close() throws IOException {
-        ctx.disconnect().syncUninterruptibly();
+        if (ctx != null){
+            ctx.disconnect().syncUninterruptibly();
+        }
     }
 
 }
