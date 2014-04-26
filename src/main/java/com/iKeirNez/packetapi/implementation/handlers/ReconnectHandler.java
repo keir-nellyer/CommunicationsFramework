@@ -1,5 +1,6 @@
 package com.iKeirNez.packetapi.implementation.handlers;
 
+import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.implementation.connection.IClientConnection;
 import com.iKeirNez.packetapi.implementation.connection.IConnection;
 import io.netty.channel.ChannelHandlerContext;
@@ -30,6 +31,8 @@ public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
             } else {
                 connection.logger.warning("Lost connection, listening for reconnect...");
             }
+
+            connection.getConnectionManager().callHook(connection, HookType.LOST_CONNECTION);
         }
     }
 }
