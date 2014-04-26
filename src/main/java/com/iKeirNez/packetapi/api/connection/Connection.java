@@ -2,10 +2,12 @@ package com.iKeirNez.packetapi.api.connection;
 
 import com.iKeirNez.packetapi.api.packets.Packet;
 
+import java.io.Closeable;
+
 /**
  * Created by iKeirNez on 10/04/2014.
  */
-public interface Connection {
+public interface Connection extends Closeable {
 
     /**
      * Gets the connected state of this connection
@@ -39,10 +41,5 @@ public interface Connection {
     public default void sendPacket(Packet packet){
         sendPacket(packet, true);
     }
-
-    /**
-     * Gracefully closes all threads and sockets associated with this connection
-     */
-    public void close() throws InterruptedException;
 
 }

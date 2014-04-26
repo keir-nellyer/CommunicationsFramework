@@ -6,12 +6,14 @@ import com.iKeirNez.packetapi.implementation.connection.IConnection;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.logging.Level;
 
 /**
  * Created by iKeirNez on 18/04/2014.
  */
-public class ConnectionHandler extends ChannelInboundHandlerAdapter {
+public class ConnectionHandler extends ChannelInboundHandlerAdapter implements Closeable {
 
     private final IConnection connection;
     private ChannelHandlerContext ctx;
@@ -64,9 +66,9 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter {
         return ctx != null && ctx.channel().isOpen();
     }
 
-    public void close() throws InterruptedException {
-        ctx.close().sync();
-        ctx.disconnect().sync();
+    @Override
+    public void close() throws IOException {
+        ctx.disconnect().syncUninterruptibly();
     }
 
 }

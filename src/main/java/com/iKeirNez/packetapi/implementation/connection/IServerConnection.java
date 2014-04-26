@@ -8,6 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import java.io.IOException;
+
 /**
  * Created by iKeirNez on 04/04/2014.
  */
@@ -33,10 +35,10 @@ public class IServerConnection extends IConnection implements ServerConnection {
     }
 
     @Override
-    public void close() throws InterruptedException {
-        bossGroup.shutdownGracefully().sync();
-        workerGroup.shutdownGracefully().sync();
+    public void close() throws IOException {
         super.close();
+        bossGroup.shutdownGracefully().syncUninterruptibly();
+        workerGroup.shutdownGracefully().syncUninterruptibly();
     }
 
 }

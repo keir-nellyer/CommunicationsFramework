@@ -5,6 +5,7 @@ import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.implementation.handlers.ConnectionHandler;
 import lombok.Getter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -47,7 +48,7 @@ public abstract class IConnection implements Connection {
         connectionHandler.send(packet);
     }
 
-    public void close() throws InterruptedException {
+    public void close() throws IOException {
         connectionManager.connections.remove(this);
         connectionHandler.close();
     }

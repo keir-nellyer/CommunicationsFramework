@@ -8,6 +8,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.concurrent.TimeUnit;
 
@@ -43,9 +44,9 @@ public class IClientConnection extends IConnection implements ClientConnection {
     }
 
     @Override
-    public void close() throws InterruptedException {
-        group.shutdownGracefully().sync();
+    public void close() throws IOException {
         super.close();
+        group.shutdownGracefully().syncUninterruptibly();
     }
 
 }

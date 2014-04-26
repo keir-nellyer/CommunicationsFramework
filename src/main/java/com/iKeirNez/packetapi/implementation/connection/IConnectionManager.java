@@ -6,11 +6,14 @@ import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.api.packets.PacketHandler;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
+
+import java.io.IOException;
 import java.lang.IllegalArgumentException;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -129,6 +132,14 @@ public class IConnectionManager implements ConnectionManager {
 
     public List<Connection> getConnections(){
         return connections;
+    }
+
+    @Override
+    public void close() throws IOException {
+        Iterator<Connection> iterator = connections.iterator();
+        while (iterator.hasNext()){
+            iterator.next().close();
+        }
     }
 
 }

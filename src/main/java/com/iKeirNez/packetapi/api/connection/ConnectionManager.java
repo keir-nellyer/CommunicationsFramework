@@ -4,6 +4,7 @@ import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
 import com.iKeirNez.packetapi.implementation.connection.IConnectionManager;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
 /**
  * Created by iKeirNez on 10/04/2014.
  */
-public interface ConnectionManager {
+public interface ConnectionManager extends Closeable {
 
     /**
      * Returns a new instance of this class
