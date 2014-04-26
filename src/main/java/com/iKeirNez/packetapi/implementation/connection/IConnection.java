@@ -50,7 +50,16 @@ public abstract class IConnection implements Connection {
         connectionHandler.send(packet);
     }
 
+    @Override
     public void close() throws IOException {
+        close(true);
+    }
+
+    public void close(boolean print) throws IOException {
+        if (print){
+            logger.info("Closing...");
+        }
+
         closing = true;
         connectionManager.connections.remove(this);
         connectionHandler.close();

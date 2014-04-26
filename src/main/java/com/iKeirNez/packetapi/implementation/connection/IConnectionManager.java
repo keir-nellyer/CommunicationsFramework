@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  */
 public class IConnectionManager implements ConnectionManager {
 
-    protected final List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
+    protected final List<IConnection> connections = Collections.synchronizedList(new ArrayList<>());
     private final Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
     private final Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
     public final ClassLoader classLoader;
@@ -126,13 +126,15 @@ public class IConnectionManager implements ConnectionManager {
     }
 
     public List<Connection> getConnections(){
-        return connections;
+        return new ArrayList<>(connections); // todo cache
     }
 
     @Override
     public void close() throws IOException {
-        for (Connection connection : new ArrayList<>(connections)){ // create copy so we don't get Concurrent issues
-            connection.close();
+        System.out.println("Closing all connections...");
+
+        for (IConnection connection : new ArrayList<>(connections)){ // create copy so we don't get Concurrent issues
+            connection.close(false);
         }
     }
 
