@@ -4,6 +4,7 @@ import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.implementation.standard.connection.IConnection;
 import com.iKeirNez.packetapi.implementation.packets.PacketDisconnect;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -56,8 +57,8 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
         }
     }
 
-    public void send(Packet packet){
-        ctx.writeAndFlush(packet).addListener(future -> {
+    public ChannelFuture send(Packet packet){
+        return ctx.writeAndFlush(packet).addListener(future -> {
             if (!future.isSuccess()){
                 throw new Exception("Unexpected exception whilst sending packet", future.cause());
             }
@@ -71,8 +72,8 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
     @Override
     public void close() throws IOException {
         if (ctx != null){
-            send(new PacketDisconnect());
             connection.closing.set(true);
+            send(new PacketDisconnect()).syncUninterruptibly();
             ctx.channel().disconnect().syncUninterruptibly();
         }
     }
