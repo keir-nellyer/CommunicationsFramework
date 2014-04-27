@@ -19,17 +19,17 @@ public class IServerConnection extends IConnection implements ServerConnection {
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-    protected IServerConnection(IConnectionManager connectionManager, String clientAddress, int port){
-        super(connectionManager, clientAddress, port);
+    protected IServerConnection(IConnectionManager connectionManager, String clientHostname, int port){
+        super(connectionManager, clientHostname, port);
 
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new StandardInitializer(this))
-                .localAddress(clientAddress, port);
+                .localAddress("", getSocketAddress().getPort());
 
         serverBootstrap.bind().addListener((ChannelFuture f) -> {
             if (!f.isSuccess()){
-                throw new Exception("Error whilst connecting to " + getAddress() + ":" + getPort(), f.cause());
+                throw new Exception("Error whilst connecting to " + getSocketAddress(), f.cause());
             }
         });
     }

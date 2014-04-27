@@ -6,6 +6,7 @@ import com.iKeirNez.packetapi.implementation.handlers.ConnectionHandler;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,7 +17,8 @@ import java.util.logging.Logger;
 public abstract class IConnection implements Connection {
 
     @Getter protected final IConnectionManager connectionManager;
-    @Getter private final String address;
+    @Getter private final InetSocketAddress socketAddress;
+    @Getter private final String hostName;
     @Getter private final int port;
 
     public ConnectionHandler connectionHandler = null;
@@ -25,13 +27,14 @@ public abstract class IConnection implements Connection {
     public final List<Packet> connectQueue = new ArrayList<>(); // packets to be sent when connection is (re)gained
     public boolean closing = false, expectingDisconnect = false;
 
-    protected IConnection(IConnectionManager connectionManager, String address, int port){
+    protected IConnection(IConnectionManager connectionManager, String hostName, int port){
         this.connectionManager = connectionManager;
-        this.address = address;
+        this.hostName = hostName;
         this.port = port;
+        this.socketAddress = new InetSocketAddress(hostName, port);
 
         connectionManager.connections.add(this);
-        logger = Logger.getLogger("Connection (" + address + ":" + port + ")");
+        logger = Logger.getLogger("Connection (" + hostName + ":" + port + ")");
     }
 
     public boolean isConnected(){

@@ -9,6 +9,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.logging.Level;
 
 /**
@@ -25,6 +26,12 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        if (connection.getHostName() != null && !connection.getHostName().isEmpty() && !connection.getSocketAddress().isUnresolved() && !((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress().equalsIgnoreCase(connection.getSocketAddress().getAddress().getHostAddress())){
+            connection.closing = true;
+            ctx.channel().disconnect();
+            return;
+        }
+
         this.ctx = ctx;
 
         connection.connectQueue.forEach(connection::sendPacket);
@@ -81,6 +88,7 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
     public void close() throws IOException {
         if (ctx != null){
             send(new PacketDisconnect());
+            connection.closing = true;
             ctx.channel().disconnect().syncUninterruptibly();
         }
     }

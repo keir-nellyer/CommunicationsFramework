@@ -23,10 +23,14 @@ public class IClientConnection extends IConnection implements ClientConnection {
     protected IClientConnection(IConnectionManager connectionManager, String serverAddress, int port){
         super(connectionManager, serverAddress, port);
 
+        if (serverAddress == null || serverAddress.isEmpty()){
+            throw new UnsupportedOperationException("Server Address cannot be null or empty");
+        }
+
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
                 .handler(new StandardInitializer(this))
-                .remoteAddress(serverAddress, port);
+                .remoteAddress(getSocketAddress());
 
         connect();
     }
@@ -37,7 +41,7 @@ public class IClientConnection extends IConnection implements ClientConnection {
                 if (f.cause() instanceof ConnectException){
                     f.channel().eventLoop().schedule((Runnable) this::connect, 1, TimeUnit.SECONDS);
                 } else {
-                    throw new Exception("Error whilst connecting to " + getAddress() + ":" + getPort(), f.cause());
+                    throw new Exception("Error whilst connecting to " + getSocketAddress(), f.cause());
                 }
             }
         });

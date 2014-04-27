@@ -3,6 +3,7 @@ package com.iKeirNez.packetapi.api.connection;
 import com.iKeirNez.packetapi.api.packets.Packet;
 
 import java.io.Closeable;
+import java.net.InetSocketAddress;
 
 /**
  * Created by iKeirNez on 10/04/2014.
@@ -16,13 +17,19 @@ public interface Connection extends Closeable {
     public boolean isConnected();
 
     /**
-     * Gets the address that this Connection will connect to (may be null in some ServerConnection instances)
-     * @return The address that this Connection will connect to
+     * Gets the address that this Connection will connect to (hostname may be null in some ServerConnection cases)
+     * @return The address that this Connection will connect to/listen for
      */
-    public String getAddress();
+    public InetSocketAddress getSocketAddress();
 
     /**
-     * Gets the port this Connection will use
+     * Gets the hostname that this Connection will connect to (may be null in some ServerConnection instances)
+     * @return The address that this Connection will connect to
+     */
+    public String getHostName();
+
+    /**
+     * Gets the port this Connection will use for the connection
      * @return The port
      */
     public int getPort();

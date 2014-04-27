@@ -40,7 +40,7 @@ public interface ConnectionManager extends Closeable {
 
     /**
      * Returns a new instance of a server connection
-     * @param clientAddress The address of the client which we will accept connections from (null to allow any address)
+     * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
      * @param port The port we should listen on
      * @return The Server Connection
      * @throws IOException Thrown if anything goes wrong during construction

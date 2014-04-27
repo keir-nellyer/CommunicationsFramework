@@ -1,11 +1,11 @@
 # PacketAPI
 
 This was originally a small wrapper to connect Clients <-> Servers using the java.net library (non NIO) I wrote to aid me in writing some private projects, it quickly evolved into a very neat API to allow listeners and hooks for different packets and events. java.net was quickly replaced with the superior Netty (using NIO) and many improvements were made.
-This project was also I way for me to learn how to use the Netty API and it has been very fun.
+This project was also I way for me to learn how to use the Netty API and it has been very fun. I do not claim to be an experienced with Netty so I may have made some mistakes.
 
-## Features:
+## Features
 
-* Easy Client <-> Server connections.
+* Easy persistent Client <-> Server connections.
 * Create your own packets with ease.
 * Listen for connection events (such as connected, lost connection, reconnect and more to be added).
 * Automatic handling of reconnects.
@@ -14,11 +14,13 @@ This project was also I way for me to learn how to use the Netty API and it has 
 * Heartbeats which allow us to determine if the other side has disconnected quickly.
 * Fully documented frontend, no need to deal with confusing internals (just make sure you only use classes within the "api" package).
 
+## Usage
+
+Examples are included in the "example" package.
+
 ## Coming Soon
 
 * Authentication, using a password/key to connect to a server.
-
-Examples are included in the "example" package.
 
 ## Contributing
 
