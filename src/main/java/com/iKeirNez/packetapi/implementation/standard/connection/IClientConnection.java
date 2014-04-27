@@ -1,7 +1,8 @@
-package com.iKeirNez.packetapi.implementation.connection;
+package com.iKeirNez.packetapi.implementation.standard.connection;
 
 import com.iKeirNez.packetapi.api.connection.ClientConnection;
-import com.iKeirNez.packetapi.implementation.handlers.StandardInitializer;
+import com.iKeirNez.packetapi.implementation.IConnectionManager;
+import com.iKeirNez.packetapi.implementation.standard.handlers.StandardInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -18,9 +19,9 @@ import java.util.concurrent.TimeUnit;
 public class IClientConnection extends IConnection implements ClientConnection {
 
     private final EventLoopGroup group = new NioEventLoopGroup();
-    private final Bootstrap bootstrap = new Bootstrap();
+    public final Bootstrap bootstrap = new Bootstrap();
 
-    protected IClientConnection(IConnectionManager connectionManager, String serverAddress, int port){
+    public IClientConnection(IConnectionManager connectionManager, String serverAddress, int port){
         super(connectionManager, serverAddress, port);
 
         if (serverAddress == null || serverAddress.isEmpty()){
@@ -31,10 +32,9 @@ public class IClientConnection extends IConnection implements ClientConnection {
                 .channel(NioSocketChannel.class)
                 .handler(new StandardInitializer(this))
                 .remoteAddress(getSocketAddress());
-
-        connect();
     }
 
+    @Override
     public void connect(){
         bootstrap.connect().addListener((ChannelFuture f) -> {
             if (!f.isSuccess()){

@@ -6,6 +6,7 @@ This project was also I way for me to learn how to use the Netty API and it has 
 ## Features
 
 * Easy persistent Client <-> Server connections.
+* Secure connections with a key.
 * Create your own packets with ease.
 * Listen for connection events (such as connected, lost connection, reconnect and more to be added).
 * Automatic handling of reconnects.
@@ -17,10 +18,6 @@ This project was also I way for me to learn how to use the Netty API and it has 
 ## Usage
 
 Examples are included in the "example" package.
-
-## Coming Soon
-
-* Authentication, using a password/key to connect to a server.
 
 ## Contributing
 

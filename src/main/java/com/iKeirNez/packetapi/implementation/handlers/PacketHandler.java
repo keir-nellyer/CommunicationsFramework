@@ -2,7 +2,7 @@ package com.iKeirNez.packetapi.implementation.handlers;
 
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
-import com.iKeirNez.packetapi.implementation.connection.IConnection;
+import com.iKeirNez.packetapi.implementation.standard.connection.IConnection;
 import com.iKeirNez.packetapi.implementation.packets.PacketDisconnect;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -10,24 +10,23 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
 
 /**
  * Created by iKeirNez on 18/04/2014.
  */
-public class ConnectionHandler extends ChannelInboundHandlerAdapter implements Closeable {
+public class PacketHandler extends ChannelInboundHandlerAdapter implements Closeable {
 
     private final IConnection connection;
     private ChannelHandlerContext ctx = null;
 
-    public ConnectionHandler(IConnection connection){
+    public PacketHandler(IConnection connection){
         this.connection = connection;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         if (connection.getHostName() != null && !connection.getHostName().isEmpty() && !connection.getSocketAddress().isUnresolved() && !((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress().equalsIgnoreCase(connection.getSocketAddress().getAddress().getHostAddress())){
-            connection.closing = true;
+            connection.closing.set(true);
             ctx.channel().disconnect();
             return;
         }
@@ -37,9 +36,9 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
         connection.connectQueue.forEach(connection::sendPacket);
         connection.connectQueue.clear();
 
-        if (connection.firstConnect){
+        if (connection.firstConnect.get()){
             connection.getConnectionManager().callHook(connection, HookType.CONNECTED);
-            connection.firstConnect = false;
+            connection.firstConnect.set(false);
         } else {
             connection.logger.info("Successfully reconnected");
             connection.getConnectionManager().callHook(connection, HookType.RECONNECTED);
@@ -51,25 +50,10 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
         Packet packet = (Packet) object;
 
         if (packet instanceof PacketDisconnect){
-            connection.expectingDisconnect = true;
+            connection.expectingDisconnect.set(true);
         } else {
             connection.getConnectionManager().callListeners(connection, packet);
         }
-    }
-
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (!connection.expectingDisconnect){ // disconnecting causes some mean looking errors, lets suppress them
-            connection.logger.log(Level.SEVERE, "Unexpected exception from downstream, disconnecting...", cause);
-            connection.expectingDisconnect = false;
-        }
-
-        ctx.close();
     }
 
     public void send(Packet packet){
@@ -88,7 +72,7 @@ public class ConnectionHandler extends ChannelInboundHandlerAdapter implements C
     public void close() throws IOException {
         if (ctx != null){
             send(new PacketDisconnect());
-            connection.closing = true;
+            connection.closing.set(true);
             ctx.channel().disconnect().syncUninterruptibly();
         }
     }

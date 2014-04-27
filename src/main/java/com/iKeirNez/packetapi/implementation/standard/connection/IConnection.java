@@ -1,14 +1,17 @@
-package com.iKeirNez.packetapi.implementation.connection;
+package com.iKeirNez.packetapi.implementation.standard.connection;
 
 import com.iKeirNez.packetapi.api.connection.Connection;
 import com.iKeirNez.packetapi.api.packets.Packet;
-import com.iKeirNez.packetapi.implementation.handlers.ConnectionHandler;
+import com.iKeirNez.packetapi.implementation.IConnectionManager;
+import com.iKeirNez.packetapi.implementation.handlers.PacketHandler;
 import lombok.Getter;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 /**
@@ -21,13 +24,13 @@ public abstract class IConnection implements Connection {
     @Getter private final String hostName;
     @Getter private final int port;
 
-    public ConnectionHandler connectionHandler = null;
+    public PacketHandler packetHandler = null;
     public final Logger logger;
-    public boolean firstConnect = true;
-    public final List<Packet> connectQueue = new ArrayList<>(); // packets to be sent when connection is (re)gained
-    public boolean closing = false, expectingDisconnect = false;
+    public AtomicBoolean firstConnect = new AtomicBoolean(true);
+    public final List<Packet> connectQueue = Collections.synchronizedList(new ArrayList<>()); // packets to be sent when connection is (re)gained
+    public AtomicBoolean closing = new AtomicBoolean(false), expectingDisconnect = new AtomicBoolean(false);
 
-    protected IConnection(IConnectionManager connectionManager, String hostName, int port){
+    public IConnection(IConnectionManager connectionManager, String hostName, int port){
         this.connectionManager = connectionManager;
         this.hostName = hostName;
         this.port = port;
@@ -38,7 +41,7 @@ public abstract class IConnection implements Connection {
     }
 
     public boolean isConnected(){
-        return connectionHandler.connected();
+        return packetHandler != null && packetHandler.connected();
     }
 
     public void sendPacket(Packet packet, boolean queueIfNotConnected){
@@ -50,7 +53,7 @@ public abstract class IConnection implements Connection {
             return;
         }
 
-        connectionHandler.send(packet);
+        packetHandler.send(packet);
     }
 
     @Override
@@ -63,9 +66,9 @@ public abstract class IConnection implements Connection {
             logger.info("Closing...");
         }
 
-        closing = true;
+        closing.set(true);
         connectionManager.connections.remove(this);
-        connectionHandler.close();
+        packetHandler.close();
     }
 
 }

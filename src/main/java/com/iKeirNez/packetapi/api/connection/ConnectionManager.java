@@ -2,10 +2,9 @@ package com.iKeirNez.packetapi.api.connection;
 
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
-import com.iKeirNez.packetapi.implementation.connection.IConnectionManager;
+import com.iKeirNez.packetapi.implementation.IConnectionManager;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -34,24 +33,40 @@ public interface ConnectionManager extends Closeable {
      * @param serverAddress The address of the server we should connect to
      * @param port The port we should use to connect
      * @return The Client Connection
-     * @throws java.io.IOException Thrown if anything goes wrong during construction
      */
-    public ClientConnection newClientConnection(String serverAddress, int port) throws Exception;
+    public ClientConnection newClientConnection(String serverAddress, int port);
+
+    /**
+     * Returns a new instance of an authenticated client connection
+     * @param serverAddress The address of the server we should connect to
+     * @param port The port we should use to connect
+     * @param key The key to authenticate with, this should be the same as the one on the server-side
+     * @return The Authenticated Client Connection
+     */
+    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverAddress, int port, char[] key);
 
     /**
      * Returns a new instance of a server connection
      * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
      * @param port The port we should listen on
      * @return The Server Connection
-     * @throws IOException Thrown if anything goes wrong during construction
      */
-    public ServerConnection newServerConnection(String clientAddress, int port) throws Exception;
+    public ServerConnection newServerConnection(String clientAddress, int port);
+
+    /**
+     * Returns a new instance of an authenticated server connection
+     * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
+     * @param port The port we should listen on
+     * @param key The key to authenticate with, this will be matched against the clients version
+     * @return The Authenticated Server Connection
+     */
+    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientAddress, int port, char[] key);
 
     /**
      * Registers an instance as being a listener, any packets received from linked Connection will be passed to applicable methods
      *
      * Methods must have the {@link com.iKeirNez.packetapi.api.packets.PacketHandler} annotation
-     * Methods have an optional first parameter {@link com.iKeirNez.packetapi.implementation.connection.IConnection} and a required second parameter implementing {@link com.iKeirNez.packetapi.api.packets.Packet}
+     * Methods have an optional first parameter {@link com.iKeirNez.packetapi.implementation.standard.connection.IConnection} and a required second parameter implementing {@link com.iKeirNez.packetapi.api.packets.Packet}
      *
      * @param packetListener The instance we should register and pass packets to
      */

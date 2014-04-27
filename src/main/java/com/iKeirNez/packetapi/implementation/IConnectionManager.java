@@ -1,11 +1,18 @@
-package com.iKeirNez.packetapi.implementation.connection;
+package com.iKeirNez.packetapi.implementation;
 
+import com.iKeirNez.packetapi.api.connection.AuthenticatedClientConnection;
+import com.iKeirNez.packetapi.api.connection.AuthenticatedServerConnection;
 import com.iKeirNez.packetapi.api.connection.Connection;
 import com.iKeirNez.packetapi.api.connection.ConnectionManager;
 import com.iKeirNez.packetapi.api.HookType;
 import com.iKeirNez.packetapi.api.packets.Packet;
 import com.iKeirNez.packetapi.api.packets.PacketHandler;
 import com.iKeirNez.packetapi.api.packets.PacketListener;
+import com.iKeirNez.packetapi.implementation.secure.connection.IAuthenticatedClientConnection;
+import com.iKeirNez.packetapi.implementation.secure.connection.IAuthenticatedServerConnection;
+import com.iKeirNez.packetapi.implementation.standard.connection.IClientConnection;
+import com.iKeirNez.packetapi.implementation.standard.connection.IConnection;
+import com.iKeirNez.packetapi.implementation.standard.connection.IServerConnection;
 
 import java.io.IOException;
 import java.lang.IllegalArgumentException;
@@ -23,7 +30,7 @@ import java.util.function.Consumer;
  */
 public class IConnectionManager implements ConnectionManager {
 
-    protected final List<IConnection> connections = Collections.synchronizedList(new ArrayList<>());
+    public final List<IConnection> connections = Collections.synchronizedList(new ArrayList<>());
     private final Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
     private final Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
     public final ClassLoader classLoader;
@@ -35,14 +42,27 @@ public class IConnectionManager implements ConnectionManager {
         this.classLoader = classLoader;
     }
 
+    @Override
     public IClientConnection newClientConnection(String serverAddress, int port){
         return new IClientConnection(this, serverAddress, port);
     }
 
+    @Override
+    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverAddress, int port, char[] key) {
+        return new IAuthenticatedClientConnection(this, serverAddress, port, key);
+    }
+
+    @Override
     public IServerConnection newServerConnection(String clientAddress, int port){
         return new IServerConnection(this, clientAddress, port);
     }
 
+    @Override
+    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientAddress, int port, char[] key) {
+        return new IAuthenticatedServerConnection(this, clientAddress, port, key);
+    }
+
+    @Override
     public void registerListener(PacketListener packetListener){
         for (Method method : packetListener.getClass().getMethods()){
             if (isMethodApplicable(method)){
@@ -56,6 +76,7 @@ public class IConnectionManager implements ConnectionManager {
         }
     }
 
+    @Override
     public boolean isListenerRegistered(PacketListener packetListener){
         for (Class<? extends Packet> clazz : listeners.keySet()){
             List<PacketListener> list = listeners.get(clazz);
@@ -68,6 +89,7 @@ public class IConnectionManager implements ConnectionManager {
         return false;
     }
 
+    @Override
     public void unregisterListener(PacketListener packetListener){
         for (Class<? extends Packet> clazz : listeners.keySet()){
             List<PacketListener> list = listeners.get(clazz);
@@ -111,6 +133,7 @@ public class IConnectionManager implements ConnectionManager {
         return method.isAnnotationPresent(PacketHandler.class) && ((parameters.length == 1 && Packet.class.isAssignableFrom(parameters[0])) || (parameters.length == 2 && parameters[0].equals(Connection.class) && Packet.class.isAssignableFrom(parameters[1])));
     }
 
+    @Override
     public void addHook(HookType hookType, Consumer<Connection> consumer){
         List<Consumer<Connection>> list = hooks.getOrDefault(hookType, new ArrayList<>());
         list.add(consumer);
@@ -125,6 +148,7 @@ public class IConnectionManager implements ConnectionManager {
         }
     }
 
+    @Override
     public List<Connection> getConnections(){
         return new ArrayList<>(connections); // todo cache
     }
