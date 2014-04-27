@@ -68,7 +68,10 @@ public abstract class IConnection implements Connection {
 
         closing.set(true);
         connectionManager.connections.remove(this);
-        packetHandler.close();
+
+        if (packetHandler != null){
+            packetHandler.close();
+        }
     }
 
 }
