@@ -1,5 +1,7 @@
 # Authenticated Connection Example
 
+It's recommended that you take a look at the standard usage first to get a feel for how this library functions.
+
 This is an example designed to test the authentication system and show new users of this API how it all works.
 The password is stored in ```char[]``` form in the Common class but in reality you'd want to store the password at both ends in a config.
 Try changing ```Common.KEY``` client side to something random, for example ```"PasswordThatWillNotWork".toCharArray()```, you will see that authentication fails and 5 seconds later, the client tries again.
