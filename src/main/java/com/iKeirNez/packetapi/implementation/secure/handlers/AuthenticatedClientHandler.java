@@ -28,7 +28,7 @@ public class AuthenticatedClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception{
         if (!connection.authenticated.get()) {
             if (msg instanceof PacketAuthenticationStatus) {
                 PacketAuthenticationStatus packet = (PacketAuthenticationStatus) msg;
@@ -46,6 +46,12 @@ public class AuthenticatedClientHandler extends ChannelInboundHandlerAdapter {
         } else {
             ctx.fireChannelRead(msg);
         }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception { // makes sure we re-authenticate when reconnecting
+        connection.authenticated.set(false);
+        ctx.fireChannelInactive();
     }
 
 }

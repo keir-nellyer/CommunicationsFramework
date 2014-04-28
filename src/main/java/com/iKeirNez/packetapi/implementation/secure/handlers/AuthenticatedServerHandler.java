@@ -48,4 +48,10 @@ public class AuthenticatedServerHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception { // makes sure we re-authenticate when reconnecting
+        connection.authenticated.set(false);
+        ctx.fireChannelInactive();
+    }
+
 }
