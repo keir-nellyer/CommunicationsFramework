@@ -58,11 +58,14 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
     }
 
     public ChannelFuture send(Packet packet){
-        return ctx.writeAndFlush(packet).addListener(future -> {
+        ChannelFuture channelFuture = ctx.writeAndFlush(packet);
+        channelFuture.addListener(future -> {
             if (!future.isSuccess()){
                 throw new Exception("Unexpected exception whilst sending packet", future.cause());
             }
         });
+
+        return channelFuture;
     }
 
     public boolean connected(){
