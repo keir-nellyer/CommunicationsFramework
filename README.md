@@ -1,4 +1,4 @@
-# CommunicationsAPI
+# CommunicationsFramework
 Formally named PacketAPI.
 This was originally a small wrapper to connect Clients <-> Servers using the java.net library (non NIO) I wrote to aid me in writing some private projects, it quickly evolved into a very neat API to allow listeners and hooks for different packets and events. java.net was quickly replaced with the superior Netty (using NIO) and many improvements were made.
 This project was also I way for me to learn how to use the Netty API and it has been very fun. I do not claim to be an experienced with Netty so I may have made some mistakes.
