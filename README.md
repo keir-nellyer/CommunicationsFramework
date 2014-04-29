@@ -42,7 +42,7 @@ Examples are included in the "example" package.
 * Each PR should only have one attached commit and it should briefly explain what has been changed.
 * Must compile with JDK 8.
 
-## FAQ
+# FAQ
 
 ### My connection(s) won't connect but I don't get any errors
   Make sure your calling ```clientConnection.connect()``` or ```serverConnection.bind()``` depending on the type of connection your using.
