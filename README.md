@@ -47,3 +47,7 @@ Examples are included in the "example" package.
 ### My connection(s) won't connect but I don't get any errors
   Make sure your calling ```clientConnection.connect()``` or ```serverConnection.bind()``` depending on the type of connection your using.
   If that still doesn't solve it, check each connections hostname and port is setup correctly.
+
+# Licensing
+
+We're GPL v3, for more details, see [here](LICENSE.txt)
