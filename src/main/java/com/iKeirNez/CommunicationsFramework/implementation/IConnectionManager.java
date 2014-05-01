@@ -1,5 +1,6 @@
 package com.iKeirNez.CommunicationsFramework.implementation;
 
+import com.iKeirNez.CommunicationsFramework.api.Callback;
 import com.iKeirNez.CommunicationsFramework.api.connection.AuthenticatedClientConnection;
 import com.iKeirNez.CommunicationsFramework.api.connection.AuthenticatedServerConnection;
 import com.iKeirNez.CommunicationsFramework.api.connection.Connection;
@@ -23,20 +24,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 /**
  * Created by iKeirNez on 06/04/2014.
  */
 public class IConnectionManager implements ConnectionManager {
 
-    public final List<IConnection> connections = Collections.synchronizedList(new ArrayList<>());
+    public final List<IConnection> connections = Collections.synchronizedList(new ArrayList<IConnection>());
     private final Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
-    private final Map<HookType, List<Consumer<Connection>>> hooks = new ConcurrentHashMap<>();
+    private final Map<HookType, List<Callback<Connection>>> hooks = new ConcurrentHashMap<>();
     public final ClassLoader classLoader;
 
     /**
-     * @deprecated see {@link com.iKeirNez.CommunicationsFramework.api.connection.ConnectionManager#getNewInstance(ClassLoader)}
+     * @deprecated see {@link com.iKeirNez.CommunicationsFramework.api.connection.ConnectionManagerFactory#getNewConnectionManager(ClassLoader)}
      */
     public IConnectionManager(ClassLoader classLoader){
         this.classLoader = classLoader;
@@ -67,7 +67,7 @@ public class IConnectionManager implements ConnectionManager {
         for (Method method : packetListener.getClass().getMethods()){
             if (isMethodApplicable(method)){
                 Class<? extends Packet> parameter = (Class<? extends Packet>) (method.getParameterCount() == 2 ? method.getParameterTypes()[1] : method.getParameterTypes()[0]);
-                List<PacketListener> list = listeners.getOrDefault(parameter, new ArrayList<>());
+                List<PacketListener> list = listeners.getOrDefault(parameter, new ArrayList<PacketListener>());
                 list.add(packetListener);
                 listeners.put(parameter, list);
             } else if (method.isAnnotationPresent(PacketHandler.class)){
@@ -134,23 +134,23 @@ public class IConnectionManager implements ConnectionManager {
     }
 
     @Override
-    public void addHook(HookType hookType, Consumer<Connection> consumer){
-        List<Consumer<Connection>> list = hooks.getOrDefault(hookType, new ArrayList<>());
+    public void addHook(HookType hookType, Callback<Connection> consumer){
+        List<Callback<Connection>> list = hooks.getOrDefault(hookType, new ArrayList<Callback<Connection>>());
         list.add(consumer);
         hooks.put(hookType, list);
     }
 
     public void callHook(IConnection connection, HookType hookType){
         if (hooks.containsKey(hookType)){
-            for (Consumer<Connection> consumer : hooks.get(hookType)){
-                consumer.accept(connection);
+            for (Callback<Connection> consumer : hooks.get(hookType)){
+                consumer.call(connection);
             }
         }
     }
 
     @Override
     public List<Connection> getConnections(){
-        return new ArrayList<>(connections); // todo cache
+        return new ArrayList<Connection>(connections); // todo cache
     }
 
     @Override

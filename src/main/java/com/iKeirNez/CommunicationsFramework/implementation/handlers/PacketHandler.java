@@ -7,6 +7,7 @@ import com.iKeirNez.CommunicationsFramework.implementation.packets.PacketDisconn
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -34,7 +35,10 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
 
         this.ctx = ctx;
 
-        connection.connectQueue.forEach(connection::sendPacket);
+        for (Packet packet : connection.connectQueue){
+            connection.sendPacket(packet);
+        }
+
         connection.connectQueue.clear();
 
         if (connection.firstConnect.get()){
@@ -59,9 +63,12 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
 
     public ChannelFuture send(Packet packet){
         ChannelFuture channelFuture = ctx.writeAndFlush(packet);
-        channelFuture.addListener(future -> {
-            if (!future.isSuccess()){
-                throw new Exception("Unexpected exception whilst sending packet", future.cause());
+        channelFuture.addListener(new GenericFutureListener<ChannelFuture>(){
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                if (!future.isSuccess()){
+                    throw new Exception("Unexpected exception whilst sending packet", future.cause());
+                }
             }
         });
 

@@ -29,7 +29,12 @@ public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
         if (!connection.closing.get()){
             if (connection instanceof ClientConnection){
                 connection.logger.warning("Lost connection, attempting reconnect...");
-                ctx.channel().eventLoop().schedule(((ClientConnection) connection)::connect, 5, TimeUnit.SECONDS);
+                ctx.channel().eventLoop().schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ClientConnection) connection).connect();
+                    }
+                }, 5, TimeUnit.SECONDS);
             } else {
                 connection.logger.warning("Lost connection, listening for reconnect...");
             }

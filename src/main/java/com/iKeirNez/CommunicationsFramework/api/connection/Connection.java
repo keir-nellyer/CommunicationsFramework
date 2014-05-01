@@ -45,8 +45,6 @@ public interface Connection extends Closeable {
      * Sends a packet via this connection to the other side
      * @param packet The packet instance to send
      */
-    public default void sendPacket(Packet packet){
-        sendPacket(packet, true);
-    }
+    public void sendPacket(Packet packet);
 
 }

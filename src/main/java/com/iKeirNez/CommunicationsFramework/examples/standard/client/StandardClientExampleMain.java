@@ -1,8 +1,11 @@
 package com.iKeirNez.CommunicationsFramework.examples.standard.client;
 
+import com.iKeirNez.CommunicationsFramework.api.Callback;
 import com.iKeirNez.CommunicationsFramework.api.HookType;
 import com.iKeirNez.CommunicationsFramework.api.connection.ClientConnection;
+import com.iKeirNez.CommunicationsFramework.api.connection.Connection;
 import com.iKeirNez.CommunicationsFramework.api.connection.ConnectionManager;
+import com.iKeirNez.CommunicationsFramework.api.connection.ConnectionManagerFactory;
 import com.iKeirNez.CommunicationsFramework.examples.PacketTest;
 
 /**
@@ -15,7 +18,7 @@ public class StandardClientExampleMain {
         new StandardClientExampleMain("localhost", 25566); // connect to localhost:25566
     }
 
-    public ConnectionManager connectionManager = ConnectionManager.getNewInstance(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
+    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
     public ClientConnection connection;
 
     public StandardClientExampleMain(String host, int port){
@@ -23,8 +26,12 @@ public class StandardClientExampleMain {
         // this is due to read and writes being handled asynchronously and therefore we might
         // not register everything in time
 
-        connectionManager.addHook(HookType.CONNECTED, c -> { // add hook for when we are connected
-            System.out.println("Woo! looks like we're connected");
+        connectionManager.addHook(HookType.CONNECTED, new Callback<Connection>() {
+            @Override
+            public void call(Connection c){
+                // add hook for when we are connected
+                System.out.println("Woo! looks like we're connected");
+            }
         });
 
         connectionManager.registerListener(new StandardClientExampleListener()); // register listener for reply

@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.iKeirNez</groupId>
     <artifactId>CommunicationsFramework</artifactId>
-    <version>2.5-SNAPSHOT</version>
+    <version>2.6-SNAPSHOT</version>
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>

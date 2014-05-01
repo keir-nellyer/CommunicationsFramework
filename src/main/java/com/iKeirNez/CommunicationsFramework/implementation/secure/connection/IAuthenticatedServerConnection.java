@@ -12,6 +12,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.IOException;
 
@@ -27,7 +28,7 @@ public class IAuthenticatedServerConnection extends IAuthenticatedConnection imp
     public IAuthenticatedServerConnection(IConnectionManager connectionManager, String hostName, int port, char[] key) {
         super(connectionManager, hostName, port, key);
 
-        IAuthenticatedServerConnection instance = this;
+        final IAuthenticatedServerConnection instance = this;
 
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
@@ -45,9 +46,12 @@ public class IAuthenticatedServerConnection extends IAuthenticatedConnection imp
     }
 
     public void bind(){
-        serverBootstrap.bind().addListener((ChannelFuture f) -> {
-            if (!f.isSuccess()){
-                throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
+        serverBootstrap.bind().addListener(new GenericFutureListener<ChannelFuture>(){
+            @Override
+            public void operationComplete(ChannelFuture f) throws Exception {
+                if (!f.isSuccess()){
+                    throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
+                }
             }
         });
     }

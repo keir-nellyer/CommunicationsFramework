@@ -1,26 +1,16 @@
 package com.iKeirNez.CommunicationsFramework.api.connection;
 
+import com.iKeirNez.CommunicationsFramework.api.Callback;
 import com.iKeirNez.CommunicationsFramework.api.HookType;
 import com.iKeirNez.CommunicationsFramework.api.packets.PacketListener;
-import com.iKeirNez.CommunicationsFramework.implementation.IConnectionManager;
 
 import java.io.Closeable;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by iKeirNez on 10/04/2014.
  */
 public interface ConnectionManager extends Closeable {
-
-    /**
-     * Returns a new instance of this class
-     * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
-     * @return The new instance
-     */
-    public static ConnectionManager getNewInstance(ClassLoader classLoader){
-        return new IConnectionManager(classLoader); // this should be our only ever reference to the internals from the API
-    }
 
     /**
      * Gets the connections associated with this manager
@@ -88,8 +78,8 @@ public interface ConnectionManager extends Closeable {
     /**
      * Consumer which will be called when something happens
      * @param hookType The type of hook to listen for
-     * @param consumer The consumer to be called
+     * @param callable The {@link com.iKeirNez.CommunicationsFramework.api.Callback} object to be called
      */
-    public void addHook(HookType hookType, Consumer<Connection> consumer);
+    public void addHook(HookType hookType, Callback<Connection> callable);
 
 }

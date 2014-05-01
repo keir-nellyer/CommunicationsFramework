@@ -8,6 +8,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -36,12 +37,20 @@ public class IClientConnection extends IConnection implements ClientConnection {
 
     @Override
     public void connect(){
-        bootstrap.connect().addListener((ChannelFuture f) -> {
-            if (!f.isSuccess()){
-                if (f.cause() instanceof ConnectException){
-                    f.channel().eventLoop().schedule((Runnable) this::connect, 1, TimeUnit.SECONDS);
-                } else {
-                    throw new Exception("Error whilst connecting to " + getSocketAddress(), f.cause());
+        bootstrap.connect().addListener(new GenericFutureListener<ChannelFuture>() {
+            @Override
+            public void operationComplete(ChannelFuture f) throws Exception {
+                if (!f.isSuccess()){
+                    if (f.cause() instanceof ConnectException){
+                        f.channel().eventLoop().schedule(new Runnable() {
+                            @Override
+                            public void run() {
+                                connect();
+                            }
+                        }, 1, TimeUnit.SECONDS);
+                    } else {
+                        throw new Exception("Error whilst connecting to " + getSocketAddress(), f.cause());
+                    }
                 }
             }
         });

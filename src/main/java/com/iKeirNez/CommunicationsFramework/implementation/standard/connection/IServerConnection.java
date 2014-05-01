@@ -8,6 +8,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.IOException;
 
@@ -30,8 +31,9 @@ public class IServerConnection extends IConnection implements ServerConnection {
     }
 
     public void bind(){
-        serverBootstrap.bind().addListener((ChannelFuture f) -> {
-            if (!f.isSuccess()){
+        serverBootstrap.bind().addListener(new GenericFutureListener<ChannelFuture>(){
+            @Override
+            public void operationComplete(ChannelFuture f) throws Exception {
                 throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
             }
         });
