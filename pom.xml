@@ -47,7 +47,7 @@
         <dependency>
             <groupId>io.netty</groupId> <!-- Todo only use parts of netty that we actually use -->
             <artifactId>netty-all</artifactId>
-            <version>4.0.17.Final</version>
+            <version>4.0.19.Final</version>
         </dependency>
     </dependencies>
 </project>
