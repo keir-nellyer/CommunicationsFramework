@@ -6,6 +6,27 @@
     <groupId>com.iKeirNez</groupId>
     <artifactId>CommunicationsFramework</artifactId>
     <version>2.6-SNAPSHOT</version>
+
+    <url>http://github.com/iKeirNez/CommunicationsFramework</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3</name>
+            <url>http://opensource.org/licenses/GPL-3.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>Keir Nellyer (iKeirNez)</id>
+        </developer>
+    </developers>
+
+    <properties>
+        <netty.version>4.0.19.Final</netty.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -27,9 +48,10 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <include>io.netty:netty-all</include>
+                                    <include>io.netty:all</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -45,9 +67,9 @@
             <version>1.12.2</version>
         </dependency>
         <dependency>
-            <groupId>io.netty</groupId> <!-- Todo only use parts of netty that we actually use -->
+            <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.0.19.Final</version>
+            <version>${netty.version}</version>
         </dependency>
     </dependencies>
 </project>
