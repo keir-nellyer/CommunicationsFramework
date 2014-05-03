@@ -79,7 +79,8 @@
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <branch>refs/heads/gh-pages</branch>
                     <includes>
-                        <include>gh-pages/**/*</include>
+                        <include>javadocs/**/*</include>
+                        <include>site/**/*</include>
                     </includes>
                     <excludes>
                         <exclude>*.jar</exclude>
