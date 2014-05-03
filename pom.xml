@@ -65,7 +65,7 @@
                 <configuration>
                     <linksource>true</linksource>
                     <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
-                    <destDir>target/gh-pages</destDir>
+                    <destDir>target/javadocs</destDir>
                     <excludePackageNames>com.iKeirNez.CommunicationsFramework.examples.*:com.iKeirNez.CommunicationsFramework.implementation.*</excludePackageNames>
                 </configuration>
             </plugin>

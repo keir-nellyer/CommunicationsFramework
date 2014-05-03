@@ -17,7 +17,7 @@ This project was also I way for me to learn how to use the Netty API and it has 
 
 ## Usage
 
-[JavaDoc](http://ikeirnez.github.io/CommunicationsFramework/)
+[JavaDoc](http://ikeirnez.github.io/CommunicationsFramework/javadocs/)
 
 Examples are included in the "example" package.
 
