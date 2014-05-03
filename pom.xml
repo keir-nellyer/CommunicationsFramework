@@ -65,7 +65,7 @@
                 <configuration>
                     <linksource>true</linksource>
                     <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
-                    <destDir>gh-pages</destDir>
+                    <destDir>target/gh-pages</destDir>
                     <excludePackageNames>com.iKeirNez.CommunicationsFramework.examples.*:com.iKeirNez.CommunicationsFramework.implementation.*</excludePackageNames>
                 </configuration>
             </plugin>
@@ -79,7 +79,7 @@
                     <outputDirectory>${project.build.directory}</outputDirectory>
                     <branch>refs/heads/gh-pages</branch>
                     <includes>
-                        <include>**/*</include>
+                        <include>gh-pages/**/*</include>
                     </includes>
                     <excludes>
                         <exclude>*.jar</exclude>
