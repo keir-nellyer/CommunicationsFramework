@@ -36,6 +36,7 @@ public class IConnectionManager implements ConnectionManager {
     public final ClassLoader classLoader;
 
     /**
+     * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
      * @deprecated see {@link com.iKeirNez.CommunicationsFramework.api.connection.ConnectionManagerFactory#getNewConnectionManager(ClassLoader)}
      */
     public IConnectionManager(ClassLoader classLoader){

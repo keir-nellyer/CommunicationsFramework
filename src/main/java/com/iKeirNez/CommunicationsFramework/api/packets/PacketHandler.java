@@ -6,7 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by iKeirNez on 06/04/2014.
+ * Methods which listen for packets being received must have this annotation.
+ *
+ * @author iKeirNez
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)

@@ -3,7 +3,9 @@ package com.iKeirNez.CommunicationsFramework.api.packets;
 import java.io.Serializable;
 
 /**
- * Created by iKeirNez on 06/04/2014.
+ * Objects being sent and received must implement this class.
+ *
+ * @author iKeirNez
  */
 public interface Packet extends Serializable {
 }

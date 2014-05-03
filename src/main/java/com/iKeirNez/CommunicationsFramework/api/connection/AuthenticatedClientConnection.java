@@ -1,7 +1,9 @@
 package com.iKeirNez.CommunicationsFramework.api.connection;
 
 /**
- * Created by iKeirNez on 27/04/2014.
+ * Represents a client connection which is authenticated.
+ *
+ * @author iKeirNez
  */
 public interface AuthenticatedClientConnection extends AuthenticatedConnection, ClientConnection {
 }

@@ -1,7 +1,9 @@
 package com.iKeirNez.CommunicationsFramework.api.connection;
 
 /**
- * Created by iKeirNez on 10/04/2014.
+ * Represents a server connection.
+ *
+ * @author iKeirNez
  */
 public interface ServerConnection extends Connection {
 

@@ -1,7 +1,9 @@
 package com.iKeirNez.CommunicationsFramework.api.packets;
 
 /**
- * Created by iKeirNez on 06/04/2014.
+ * Classes listening for packets being received must implement this.
+ *
+ * @author iKeirNez
  */
 public interface PacketListener {
 }

@@ -1,7 +1,9 @@
 package com.iKeirNez.CommunicationsFramework.api.connection;
 
 /**
- * Created by iKeirNez on 27/04/2014.
+ * Represents a server connection which has been authenticated.
+ *
+ * @author iKeirNez
  */
 public interface AuthenticatedServerConnection extends AuthenticatedConnection, ServerConnection {
 }

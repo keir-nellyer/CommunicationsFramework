@@ -3,13 +3,15 @@ package com.iKeirNez.CommunicationsFramework.api.connection;
 import com.iKeirNez.CommunicationsFramework.implementation.IConnectionManager;
 
 /**
- * This class had to be created as Java 7 and below don't allow static methods in interfaces
- * Created by iKeirNez on 01/05/2014.
+ * Static class used for getting a new {@link com.iKeirNez.CommunicationsFramework.api.connection.ConnectionManager}
+ *
+ * @author iKeirNez
  */
 public class ConnectionManagerFactory {
 
     /**
      * Returns a new instance of this class
+     *
      * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
      * @return The new instance
      */

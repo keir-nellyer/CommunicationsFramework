@@ -1,7 +1,9 @@
 package com.iKeirNez.CommunicationsFramework.api;
 
 /**
- * Created by iKeirNez on 06/04/2014.
+ * Enum containing types of hooks you may listen for.
+ *
+ * @author iKeirNez
  */
 public enum HookType {
 

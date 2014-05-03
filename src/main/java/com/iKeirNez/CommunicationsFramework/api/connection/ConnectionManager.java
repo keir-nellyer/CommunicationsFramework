@@ -8,18 +8,22 @@ import java.io.Closeable;
 import java.util.List;
 
 /**
- * Created by iKeirNez on 10/04/2014.
+ * Manages a group of connections.
+ *
+ * @author iKeirNez
  */
 public interface ConnectionManager extends Closeable {
 
     /**
      * Gets the connections associated with this manager
+     *
      * @return The connections associated with this manager
      */
     public List<Connection> getConnections();
 
     /**
      * Returns a new instance of a client connection
+     *
      * @param serverAddress The address of the server we should connect to
      * @param port The port we should use to connect
      * @return The Client Connection
@@ -28,6 +32,7 @@ public interface ConnectionManager extends Closeable {
 
     /**
      * Returns a new instance of an authenticated client connection
+     *
      * @param serverAddress The address of the server we should connect to
      * @param port The port we should use to connect
      * @param key The key to authenticate with, this should be the same as the one on the server-side
@@ -37,6 +42,7 @@ public interface ConnectionManager extends Closeable {
 
     /**
      * Returns a new instance of a server connection
+     *
      * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
      * @param port The port we should listen on
      * @return The Server Connection
@@ -45,6 +51,7 @@ public interface ConnectionManager extends Closeable {
 
     /**
      * Returns a new instance of an authenticated server connection
+     *
      * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
      * @param port The port we should listen on
      * @param key The key to authenticate with, this will be matched against the clients version
@@ -64,6 +71,7 @@ public interface ConnectionManager extends Closeable {
 
     /**
      * Checks if a listener is registered
+     *
      * @param packetListener The listener to check for being registered
      * @return Register status
      */
@@ -71,12 +79,14 @@ public interface ConnectionManager extends Closeable {
 
     /**
      * Un-registers a listener instance
+     *
      * @param packetListener The listener instance to un-register
      */
     public void unregisterListener(PacketListener packetListener);
 
     /**
      * Consumer which will be called when something happens
+     *
      * @param hookType The type of hook to listen for
      * @param callable The {@link com.iKeirNez.CommunicationsFramework.api.Callback} object to be called
      */

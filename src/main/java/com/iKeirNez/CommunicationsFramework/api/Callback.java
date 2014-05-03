@@ -1,11 +1,18 @@
 package com.iKeirNez.CommunicationsFramework.api;
 
 /**
- * Pretty much the same as a Java 8 Consumer (except we can't use them in Java 6)
- * Created by iKeirNez on 01/05/2014.
+ * Small "hack" to get this working in versions lower than 1.8.
+ * Inspired by Java 8s {@link java.util.function.Consumer}.
+ *
+ * @author iKeirNez
  */
 public interface Callback<T> {
 
+    /**
+     * Accept an input value.
+     *
+     * @param t The input object.
+     */
     public void call(T t);
 
 }
