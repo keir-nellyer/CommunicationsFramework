@@ -1,0 +1,5 @@
+#surefire
+#Sat May 03 09:21:02 EDT 2014
+user.dir=/var/lib/jenkins/workspace/CommunicationsFramework
+localRepository=/var/lib/jenkins/.m2/repository
+basedir=/var/lib/jenkins/workspace/CommunicationsFramework
