@@ -66,7 +66,7 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
         channelFuture.addListener(new GenericFutureListener<ChannelFuture>(){
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
-                if (!future.isSuccess()){
+                if (!future.isSuccess() && !connection.closing.get()){
                     throw new Exception("Unexpected exception whilst sending packet", future.cause());
                 }
             }
@@ -83,7 +83,11 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
     public void close() throws IOException {
         if (ctx != null){
             connection.closing.set(true);
-            send(new PacketDisconnect()).syncUninterruptibly();
+
+            if (connection.isConnected()){
+                send(new PacketDisconnect()).syncUninterruptibly();
+            }
+
             ctx.channel().disconnect().syncUninterruptibly();
         }
     }
