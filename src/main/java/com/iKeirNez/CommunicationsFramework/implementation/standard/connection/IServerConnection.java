@@ -34,7 +34,9 @@ public class IServerConnection extends IConnection implements ServerConnection {
         serverBootstrap.bind().addListener(new GenericFutureListener<ChannelFuture>(){
             @Override
             public void operationComplete(ChannelFuture f) throws Exception {
-                throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
+                if (!f.isSuccess()){
+                    throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
+                }
             }
         });
     }

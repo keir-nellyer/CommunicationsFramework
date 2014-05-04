@@ -23,7 +23,7 @@ Examples are included in the "example" package.
 
 ## Contributing
 
-* Install the Java 6 JRE & JDK if you haven't already.
+* Install the Java 7 JDK if you haven't already.
 * Install [Maven 3](http://maven.apache.org/download.html).
 * Fork this repo and make your changes.
 * To compile: ```mvn clean install```.
