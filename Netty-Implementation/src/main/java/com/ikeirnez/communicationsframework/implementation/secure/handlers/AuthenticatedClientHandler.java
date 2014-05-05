@@ -1,7 +1,7 @@
 package com.ikeirnez.communicationsframework.implementation.secure.handlers;
 
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.implementation.secure.connection.IAuthenticatedClientConnection;
+import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedClientConnection;
 import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticate;
 import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticationStatus;
 
@@ -13,9 +13,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class AuthenticatedClientHandler extends ChannelInboundHandlerAdapter {
 
-  private IAuthenticatedClientConnection connection;
+  private ConcreteAuthenticatedClientConnection connection;
 
-  public AuthenticatedClientHandler(IAuthenticatedClientConnection connection) {
+  public AuthenticatedClientHandler(ConcreteAuthenticatedClientConnection connection) {
     this.connection = connection;
   }
 

@@ -1,7 +1,7 @@
 package com.ikeirnez.communicationsframework.implementation.secure.handlers;
 
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.implementation.secure.connection.IAuthenticatedServerConnection;
+import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedServerConnection;
 import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticate;
 import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticationStatus;
 
@@ -15,9 +15,9 @@ import java.util.Arrays;
  */
 public class AuthenticatedServerHandler extends ChannelInboundHandlerAdapter {
 
-  private IAuthenticatedServerConnection connection;
+  private ConcreteAuthenticatedServerConnection connection;
 
-  public AuthenticatedServerHandler(IAuthenticatedServerConnection connection) {
+  public AuthenticatedServerHandler(ConcreteAuthenticatedServerConnection connection) {
     this.connection = connection;
   }
 

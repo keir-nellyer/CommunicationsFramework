@@ -3,7 +3,7 @@ package com.ikeirnez.communicationsframework.implementation.standard.handlers;
 import com.ikeirnez.communicationsframework.implementation.handlers.BasicHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.PacketHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.ReconnectHandler;
-import com.ikeirnez.communicationsframework.implementation.standard.connection.IConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -21,9 +21,9 @@ public class StandardInitializer extends ChannelInitializer<SocketChannel> {
   // Cache to save on resources
   private static ObjectEncoder objectEncoder = new ObjectEncoder();
 
-  private final IConnection connection;
+  private final ConcreteConnection connection;
 
-  public StandardInitializer(IConnection connection) {
+  public StandardInitializer(ConcreteConnection connection) {
     this.connection = connection;
   }
 
@@ -35,14 +35,14 @@ public class StandardInitializer extends ChannelInitializer<SocketChannel> {
     addOthers(connection, channelPipeline);
   }
 
-  public static void addObjectHandlers(IConnection connection, ChannelPipeline channelPipeline) {
+  public static void addObjectHandlers(ConcreteConnection connection, ChannelPipeline channelPipeline) {
     channelPipeline.addLast(
         objectEncoder,
         new ObjectDecoder(ClassResolvers.weakCachingResolver(connection.getConnectionManager().classLoader)),
         new BasicHandler(connection));
   }
 
-  public static void addOthers(IConnection connection, ChannelPipeline channelPipeline) {
+  public static void addOthers(ConcreteConnection connection, ChannelPipeline channelPipeline) {
     connection.packetHandler = new PacketHandler(connection);
 
     channelPipeline.addLast(

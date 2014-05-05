@@ -2,7 +2,7 @@ package com.ikeirnez.communicationsframework.implementation.handlers;
 
 import com.ikeirnez.communicationsframework.api.connection.ClientConnection;
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.implementation.standard.connection.IConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
 
-  private final IConnection connection;
+  private final ConcreteConnection connection;
 
-  public ReconnectHandler(IConnection connection) {
+  public ReconnectHandler(ConcreteConnection connection) {
     this.connection = connection;
   }
 

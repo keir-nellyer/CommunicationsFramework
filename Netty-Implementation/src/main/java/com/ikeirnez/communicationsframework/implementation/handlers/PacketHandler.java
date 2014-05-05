@@ -2,7 +2,7 @@ package com.ikeirnez.communicationsframework.implementation.handlers;
 
 import com.ikeirnez.communicationsframework.api.packets.Packet;
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.implementation.standard.connection.IConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
 import com.ikeirnez.communicationsframework.implementation.packets.PacketDisconnect;
 
 import io.netty.channel.ChannelFuture;
@@ -19,10 +19,10 @@ import java.net.InetSocketAddress;
  */
 public class PacketHandler extends ChannelInboundHandlerAdapter implements Closeable {
 
-  private final IConnection connection;
+  private final ConcreteConnection connection;
   private ChannelHandlerContext ctx = null;
 
-  public PacketHandler(IConnection connection) {
+  public PacketHandler(ConcreteConnection connection) {
     this.connection = connection;
   }
 

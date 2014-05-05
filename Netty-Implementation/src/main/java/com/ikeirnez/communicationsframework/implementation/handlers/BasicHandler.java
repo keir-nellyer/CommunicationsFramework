@@ -1,6 +1,6 @@
 package com.ikeirnez.communicationsframework.implementation.handlers;
 
-import com.ikeirnez.communicationsframework.implementation.standard.connection.IConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,9 +12,9 @@ import java.util.logging.Level;
  */
 public class BasicHandler extends ChannelInboundHandlerAdapter {
 
-  private IConnection connection;
+  private ConcreteConnection connection;
 
-  public BasicHandler(IConnection connection) {
+  public BasicHandler(ConcreteConnection connection) {
     this.connection = connection;
   }
 
