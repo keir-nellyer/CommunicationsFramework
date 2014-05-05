@@ -15,6 +15,13 @@ This project was also I way for me to learn how to use the Netty API and it has 
 * Heartbeats which allow us to determine if the other side has disconnected quickly.
 * Fully documented frontend, no need to deal with confusing internals (just make sure you only use classes within the "api" package).
 
+## Coming Soon
+
+* ConnectionManagerBuilder to customize each aspect of the manager
+* ConnectionBuilder to customize each aspect of the connection
+* Default options set in ConnectionManager, applied to each connection when created
+* Better way of handling very simple packets
+
 ## Usage
 
 [JavaDoc](http://ikeirnez.github.io/CommunicationsFramework/javadocs/)
