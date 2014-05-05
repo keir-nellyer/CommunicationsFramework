@@ -7,15 +7,15 @@ import com.ikeirnez.communicationsframework.api.packets.Packet;
  */
 public class PacketAuthenticationStatus implements Packet {
 
-	private static final long serialVersionUID = 2164463256993419796L;
+  private static final long serialVersionUID = 2164463256993419796L;
 
-	private final boolean allowed;
+  private final boolean allowed;
 
-	public PacketAuthenticationStatus(boolean allowed) {
-		this.allowed = allowed;
-	}
+  public PacketAuthenticationStatus(boolean allowed) {
+    this.allowed = allowed;
+  }
 
-	public boolean isAllowed( ) {
-		return allowed;
-	}
+  public boolean isAllowed( ) {
+    return allowed;
+  }
 }

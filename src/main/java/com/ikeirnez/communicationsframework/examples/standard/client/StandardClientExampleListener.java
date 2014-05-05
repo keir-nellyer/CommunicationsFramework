@@ -10,9 +10,9 @@ import com.ikeirnez.communicationsframework.examples.PacketTest;
  */
 public class StandardClientExampleListener implements PacketListener {
 
-	@PacketHandler
-	public void onPacketTest(PacketTest packet) { // this will be run when we receive a reply from the server
-		System.out.println("Received packet, data: " + packet.getRandomString()); // print the data
-	}
+  @PacketHandler
+  public void onPacketTest(PacketTest packet) { // this will be run when we receive a reply from the server
+    System.out.println("Received packet, data: " + packet.getRandomString()); // print the data
+  }
 
 }

@@ -14,31 +14,31 @@ import com.ikeirnez.communicationsframework.examples.PacketTest;
  */
 public class StandardClientExampleMain {
 
-	public static void main(String[] args) {
-		new StandardClientExampleMain("localhost", 25566); // connect to localhost:25566
-	}
+  public static void main(String[] args) {
+    new StandardClientExampleMain("localhost", 25566); // connect to localhost:25566
+  }
 
-	public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
-	public ClientConnection connection;
+  public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
+  public ClientConnection connection;
 
-	public StandardClientExampleMain(String host, int port) {
-		// its a good idea to register hooks and listeners before attempting the connection
-		// this is due to read and writes being handled asynchronously and therefore we might
-		// not register everything in time
+  public StandardClientExampleMain(String host, int port) {
+    // its a good idea to register hooks and listeners before attempting the connection
+    // this is due to read and writes being handled asynchronously and therefore we might
+    // not register everything in time
 
-		connectionManager.addHook(HookType.CONNECTED, new Callback<Connection>() {
-			@Override
-			public void call(Connection c) {
-				// add hook for when we are connected
-				System.out.println("Woo! looks like we're connected");
-			}
-		});
+    connectionManager.addHook(HookType.CONNECTED, new Callback<Connection>() {
+      @Override
+      public void call(Connection c) {
+        // add hook for when we are connected
+        System.out.println("Woo! looks like we're connected");
+      }
+    });
 
-		connectionManager.registerListener(new StandardClientExampleListener()); // register listener for reply
+    connectionManager.registerListener(new StandardClientExampleListener()); // register listener for reply
 
-		connection = connectionManager.newClientConnection(host, port); // create the connection instance and populate it with our data
-		connection.connect(); // attempt connecting asynchronously
-		connection.sendPacket(new PacketTest("Hey, this message was sent from the client")); // send a packet to the server
-	}
+    connection = connectionManager.newClientConnection(host, port); // create the connection instance and populate it with our data
+    connection.connect(); // attempt connecting asynchronously
+    connection.sendPacket(new PacketTest("Hey, this message was sent from the client")); // send a packet to the server
+  }
 
 }

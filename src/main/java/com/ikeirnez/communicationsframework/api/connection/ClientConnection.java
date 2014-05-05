@@ -7,10 +7,10 @@ package com.ikeirnez.communicationsframework.api.connection;
  */
 public interface ClientConnection extends Connection {
 
-	/**
-	 * Initiates a connection to the specified host name and port
-	 * Will continually attempt to connect until success
-	 */
-	public void connect( );
+  /**
+   * Initiates a connection to the specified host name and port
+   * Will continually attempt to connect until success
+   */
+  public void connect( );
 
 }

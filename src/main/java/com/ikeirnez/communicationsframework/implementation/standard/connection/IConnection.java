@@ -18,84 +18,84 @@ import com.ikeirnez.communicationsframework.implementation.IConnectionManager;
  */
 public abstract class IConnection implements Connection {
 
-	protected final IConnectionManager connectionManager;
-	private final InetSocketAddress socketAddress;
-	private final String hostName;
-	private final int port;
+  protected final IConnectionManager connectionManager;
+  private final InetSocketAddress socketAddress;
+  private final String hostName;
+  private final int port;
 
-	public PacketHandler packetHandler = null;
-	public final Logger logger;
-	public AtomicBoolean firstConnect = new AtomicBoolean(true);
-	public final List<Packet> connectQueue = Collections.synchronizedList(new ArrayList<Packet>()); // packets to be sent when connection is (re)gained
-	public AtomicBoolean closing = new AtomicBoolean(false), expectingDisconnect = new AtomicBoolean(false);
+  public PacketHandler packetHandler = null;
+  public final Logger logger;
+  public AtomicBoolean firstConnect = new AtomicBoolean(true);
+  public final List<Packet> connectQueue = Collections.synchronizedList(new ArrayList<Packet>()); // packets to be sent when connection is (re)gained
+  public AtomicBoolean closing = new AtomicBoolean(false), expectingDisconnect = new AtomicBoolean(false);
 
-	public IConnection(IConnectionManager connectionManager, String hostName, int port) {
-		this.connectionManager = connectionManager;
-		this.hostName = hostName;
-		this.port = port;
-		socketAddress = new InetSocketAddress(hostName, port);
+  public IConnection(IConnectionManager connectionManager, String hostName, int port) {
+    this.connectionManager = connectionManager;
+    this.hostName = hostName;
+    this.port = port;
+    socketAddress = new InetSocketAddress(hostName, port);
 
-		connectionManager.connections.add(this);
-		logger = Logger.getLogger("Connection (" + hostName + ":" + port + ")");
-	}
+    connectionManager.connections.add(this);
+    logger = Logger.getLogger("Connection (" + hostName + ":" + port + ")");
+  }
 
-	@Override
-	public boolean isConnected( ) {
-		return (packetHandler != null) && packetHandler.connected();
-	}
+  @Override
+  public boolean isConnected( ) {
+    return (packetHandler != null) && packetHandler.connected();
+  }
 
-	@Override
-	public void sendPacket(Packet packet) {
-		sendPacket(packet, true);
-	}
+  @Override
+  public void sendPacket(Packet packet) {
+    sendPacket(packet, true);
+  }
 
-	@Override
-	public void sendPacket(Packet packet, boolean queueIfNotConnected) {
-		if (!isConnected()) {
-			if (queueIfNotConnected) {
-				connectQueue.add(packet);
-			}
+  @Override
+  public void sendPacket(Packet packet, boolean queueIfNotConnected) {
+    if (!isConnected()) {
+      if (queueIfNotConnected) {
+        connectQueue.add(packet);
+      }
 
-			return;
-		}
+      return;
+    }
 
-		packetHandler.send(packet);
-	}
+    packetHandler.send(packet);
+  }
 
-	@Override
-	public void close( ) throws IOException {
-		close(true);
-	}
+  @Override
+  public void close( ) throws IOException {
+    close(true);
+  }
 
-	public void close(boolean print) throws IOException {
-		if (print) {
-			logger.info("Closing...");
-		}
+  public void close(boolean print) throws IOException {
+    if (print) {
+      logger.info("Closing...");
+    }
 
-		closing.set(true);
-		connectionManager.connections.remove(this);
+    closing.set(true);
+    connectionManager.connections.remove(this);
 
-		if (packetHandler != null) {
-			packetHandler.close();
-		}
-	}
+    if (packetHandler != null) {
+      packetHandler.close();
+    }
+  }
 
-	public IConnectionManager getConnectionManager( ) {
-		return connectionManager;
-	}
+  public IConnectionManager getConnectionManager( ) {
+    return connectionManager;
+  }
 
-	@Override
-	public InetSocketAddress getSocketAddress( ) {
-		return socketAddress;
-	}
+  @Override
+  public InetSocketAddress getSocketAddress( ) {
+    return socketAddress;
+  }
 
-	@Override
-	public String getHostName( ) {
-		return hostName;
-	}
+  @Override
+  public String getHostName( ) {
+    return hostName;
+  }
 
-	@Override
-	public int getPort( ) {
-		return port;
-	}
+  @Override
+  public int getPort( ) {
+    return port;
+  }
 }

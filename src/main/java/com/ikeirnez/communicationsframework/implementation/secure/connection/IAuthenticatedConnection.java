@@ -11,26 +11,26 @@ import com.ikeirnez.communicationsframework.implementation.IConnectionManager;
  */
 public class IAuthenticatedConnection extends IConnection implements AuthenticatedConnection {
 
-	public final char[] key;
-	public AtomicBoolean authenticated = new AtomicBoolean(false);
+  public final char[] key;
+  public AtomicBoolean authenticated = new AtomicBoolean(false);
 
-	protected IAuthenticatedConnection(IConnectionManager connectionManager, String hostName, int port, char[] key) {
-		super(connectionManager, hostName, port);
-		this.key = key;
-	}
+  protected IAuthenticatedConnection(IConnectionManager connectionManager, String hostName, int port, char[] key) {
+    super(connectionManager, hostName, port);
+    this.key = key;
+  }
 
-	@Override
-	public boolean isAuthenticated( ) {
-		return authenticated.get();
-	}
+  @Override
+  public boolean isAuthenticated( ) {
+    return authenticated.get();
+  }
 
-	@Override
-	public boolean isConnected( ) { // always return false if we're not authenticated
-		return isAuthenticated() && super.isConnected();
-	}
+  @Override
+  public boolean isConnected( ) { // always return false if we're not authenticated
+    return isAuthenticated() && super.isConnected();
+  }
 
-	@Override
-	public char[] getKey( ) {
-		return key;
-	}
+  @Override
+  public char[] getKey( ) {
+    return key;
+  }
 }

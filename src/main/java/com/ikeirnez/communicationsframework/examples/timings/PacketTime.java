@@ -7,21 +7,21 @@ import com.ikeirnez.communicationsframework.api.packets.Packet;
  */
 public class PacketTime implements Packet {
 
-	private static final long serialVersionUID = 573893027740646116L;
+  private static final long serialVersionUID = 573893027740646116L;
 
-	private final long nanosSent;
-	private final boolean last;
+  private final long nanosSent;
+  private final boolean last;
 
-	public PacketTime(long nanosSent, boolean last) {
-		this.nanosSent = nanosSent;
-		this.last = last;
-	}
+  public PacketTime(long nanosSent, boolean last) {
+    this.nanosSent = nanosSent;
+    this.last = last;
+  }
 
-	public long getNanosSent( ) {
-		return nanosSent;
-	}
+  public long getNanosSent( ) {
+    return nanosSent;
+  }
 
-	public boolean isLast( ) {
-		return last;
-	}
+  public boolean isLast( ) {
+    return last;
+  }
 }

@@ -18,35 +18,35 @@ import java.io.IOException;
  */
 public class IServerConnection extends IConnection implements ServerConnection {
 
-	private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-	private final EventLoopGroup workerGroup = new NioEventLoopGroup();
-	private final ServerBootstrap serverBootstrap = new ServerBootstrap();
+  private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+  private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+  private final ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-	public IServerConnection(IConnectionManager connectionManager, String clientHostname, int port) {
-		super(connectionManager, clientHostname, port);
+  public IServerConnection(IConnectionManager connectionManager, String clientHostname, int port) {
+    super(connectionManager, clientHostname, port);
 
-		serverBootstrap.group(bossGroup, workerGroup)
-				.channel(NioServerSocketChannel.class)
-				.childHandler(new StandardInitializer(this))
-				.localAddress("", getSocketAddress().getPort());
-	}
+    serverBootstrap.group(bossGroup, workerGroup)
+        .channel(NioServerSocketChannel.class)
+        .childHandler(new StandardInitializer(this))
+        .localAddress("", getSocketAddress().getPort());
+  }
 
-	public void bind( ) {
-		serverBootstrap.bind().addListener(new GenericFutureListener<ChannelFuture>() {
-			@Override
-			public void operationComplete(ChannelFuture f) throws Exception {
-				if (!f.isSuccess()) {
-					throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
-				}
-			}
-		});
-	}
+  public void bind( ) {
+    serverBootstrap.bind().addListener(new GenericFutureListener<ChannelFuture>() {
+      @Override
+      public void operationComplete(ChannelFuture f) throws Exception {
+        if (!f.isSuccess()) {
+          throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
+        }
+      }
+    });
+  }
 
-	@Override
-	public void close( ) throws IOException {
-		super.close();
-		bossGroup.shutdownGracefully().syncUninterruptibly();
-		workerGroup.shutdownGracefully().syncUninterruptibly();
-	}
+  @Override
+  public void close( ) throws IOException {
+    super.close();
+    bossGroup.shutdownGracefully().syncUninterruptibly();
+    workerGroup.shutdownGracefully().syncUninterruptibly();
+  }
 
 }

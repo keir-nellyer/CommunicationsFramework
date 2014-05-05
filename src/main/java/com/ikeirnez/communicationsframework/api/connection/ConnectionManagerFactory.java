@@ -9,15 +9,15 @@ import com.ikeirnez.communicationsframework.implementation.IConnectionManager;
  */
 public class ConnectionManagerFactory {
 
-	/**
-	 * Returns a new instance of this class
-	 *
-	 * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
-	 * @return The new instance
-	 */
-	@SuppressWarnings("deprecation")
-	public static ConnectionManager getNewConnectionManager(ClassLoader classLoader) {
-		return new IConnectionManager(classLoader); // this should be our only ever reference to the internals from the API
-	}
+  /**
+   * Returns a new instance of this class
+   *
+   * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
+   * @return The new instance
+   */
+  @SuppressWarnings("deprecation")
+  public static ConnectionManager getNewConnectionManager(ClassLoader classLoader) {
+    return new IConnectionManager(classLoader); // this should be our only ever reference to the internals from the API
+  }
 
 }

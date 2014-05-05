@@ -7,6 +7,6 @@ import com.ikeirnez.communicationsframework.api.packets.Packet;
  */
 public class PacketDisconnect implements Packet {
 
-	private static final long serialVersionUID = 5531822978441394368L;
+  private static final long serialVersionUID = 5531822978441394368L;
 
 }

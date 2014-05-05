@@ -24,57 +24,57 @@ import java.util.concurrent.TimeUnit;
  */
 public class IAuthenticatedClientConnection extends IAuthenticatedConnection implements AuthenticatedClientConnection {
 
-	private final EventLoopGroup group = new NioEventLoopGroup();
-	public final Bootstrap bootstrap = new Bootstrap();
+  private final EventLoopGroup group = new NioEventLoopGroup();
+  public final Bootstrap bootstrap = new Bootstrap();
 
-	public IAuthenticatedClientConnection(IConnectionManager connectionManager, String serverddress, int port, char[] key) {
-		super(connectionManager, serverddress, port, key);
+  public IAuthenticatedClientConnection(IConnectionManager connectionManager, String serverddress, int port, char[] key) {
+    super(connectionManager, serverddress, port, key);
 
-		if (serverddress == null || serverddress.isEmpty()) {
-			throw new UnsupportedOperationException("Server Address cannot be null or empty");
-		}
+    if (serverddress == null || serverddress.isEmpty()) {
+      throw new UnsupportedOperationException("Server Address cannot be null or empty");
+    }
 
-		final IAuthenticatedClientConnection instance = this;
+    final IAuthenticatedClientConnection instance = this;
 
-		bootstrap.group(group)
-				.channel(NioSocketChannel.class)
-				.handler(new ChannelInitializer<SocketChannel>() {
-					@Override
-					protected void initChannel(SocketChannel ch) throws Exception {
-						ChannelPipeline channelPipeline = ch.pipeline();
+    bootstrap.group(group)
+        .channel(NioSocketChannel.class)
+        .handler(new ChannelInitializer<SocketChannel>() {
+          @Override
+          protected void initChannel(SocketChannel ch) throws Exception {
+            ChannelPipeline channelPipeline = ch.pipeline();
 
-						StandardInitializer.addObjectHandlers(instance, channelPipeline);
-						ch.pipeline().addLast(new AuthenticatedClientHandler(instance));
-						StandardInitializer.addOthers(instance, channelPipeline);
-					}
-				}).remoteAddress(getSocketAddress());
-	}
+            StandardInitializer.addObjectHandlers(instance, channelPipeline);
+            ch.pipeline().addLast(new AuthenticatedClientHandler(instance));
+            StandardInitializer.addOthers(instance, channelPipeline);
+          }
+        }).remoteAddress(getSocketAddress());
+  }
 
-	@Override
-	public void connect( ) {
-		bootstrap.connect().addListener(new GenericFutureListener<ChannelFuture>() {
-			@Override
-			public void operationComplete(ChannelFuture f) throws Exception {
-				if (!f.isSuccess()) {
-					if (f.cause() instanceof ConnectException) {
-						f.channel().eventLoop().schedule(new Runnable() {
-							@Override
-							public void run( ) {
-								connect();
-							}
-						}, 1, TimeUnit.SECONDS);
-					} else {
-						throw new Exception("Error whilst connecting to " + getSocketAddress(), f.cause());
-					}
-				}
-			}
-		});
-	}
+  @Override
+  public void connect( ) {
+    bootstrap.connect().addListener(new GenericFutureListener<ChannelFuture>() {
+      @Override
+      public void operationComplete(ChannelFuture f) throws Exception {
+        if (!f.isSuccess()) {
+          if (f.cause() instanceof ConnectException) {
+            f.channel().eventLoop().schedule(new Runnable() {
+              @Override
+              public void run( ) {
+                connect();
+              }
+            }, 1, TimeUnit.SECONDS);
+          } else {
+            throw new Exception("Error whilst connecting to " + getSocketAddress(), f.cause());
+          }
+        }
+      }
+    });
+  }
 
-	@Override
-	public void close( ) throws IOException {
-		super.close();
-		group.shutdownGracefully().syncUninterruptibly();
-	}
+  @Override
+  public void close( ) throws IOException {
+    super.close();
+    group.shutdownGracefully().syncUninterruptibly();
+  }
 
 }

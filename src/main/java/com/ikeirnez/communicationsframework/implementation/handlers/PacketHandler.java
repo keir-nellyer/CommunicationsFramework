@@ -19,79 +19,79 @@ import java.net.InetSocketAddress;
  */
 public class PacketHandler extends ChannelInboundHandlerAdapter implements Closeable {
 
-	private final IConnection connection;
-	private ChannelHandlerContext ctx = null;
+  private final IConnection connection;
+  private ChannelHandlerContext ctx = null;
 
-	public PacketHandler(IConnection connection) {
-		this.connection = connection;
-	}
+  public PacketHandler(IConnection connection) {
+    this.connection = connection;
+  }
 
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		if (connection.getHostName() != null && !connection.getHostName().isEmpty() && !connection.getSocketAddress().isUnresolved()
-				&& !((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress().equalsIgnoreCase(connection.getSocketAddress().getAddress().getHostAddress())) {
-			connection.closing.set(true);
-			ctx.channel().disconnect();
-			return;
-		}
+  @Override
+  public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    if (connection.getHostName() != null && !connection.getHostName().isEmpty() && !connection.getSocketAddress().isUnresolved()
+        && !((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress().equalsIgnoreCase(connection.getSocketAddress().getAddress().getHostAddress())) {
+      connection.closing.set(true);
+      ctx.channel().disconnect();
+      return;
+    }
 
-		this.ctx = ctx;
+    this.ctx = ctx;
 
-		for (Packet packet : connection.connectQueue) {
-			connection.sendPacket(packet);
-		}
+    for (Packet packet : connection.connectQueue) {
+      connection.sendPacket(packet);
+    }
 
-		connection.connectQueue.clear();
+    connection.connectQueue.clear();
 
-		if (connection.firstConnect.get()) {
-			connection.getConnectionManager().callHook(connection, HookType.CONNECTED);
-			connection.firstConnect.set(false);
-		} else {
-			connection.logger.info("Successfully reconnected");
-			connection.getConnectionManager().callHook(connection, HookType.RECONNECTED);
-		}
-	}
+    if (connection.firstConnect.get()) {
+      connection.getConnectionManager().callHook(connection, HookType.CONNECTED);
+      connection.firstConnect.set(false);
+    } else {
+      connection.logger.info("Successfully reconnected");
+      connection.getConnectionManager().callHook(connection, HookType.RECONNECTED);
+    }
+  }
 
-	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object object) throws Exception {
-		Packet packet = (Packet) object;
+  @Override
+  public void channelRead(ChannelHandlerContext ctx, Object object) throws Exception {
+    Packet packet = (Packet) object;
 
-		if (packet instanceof PacketDisconnect) {
-			connection.expectingDisconnect.set(true);
-		} else {
-			connection.getConnectionManager().callListeners(connection, packet);
-		}
-	}
+    if (packet instanceof PacketDisconnect) {
+      connection.expectingDisconnect.set(true);
+    } else {
+      connection.getConnectionManager().callListeners(connection, packet);
+    }
+  }
 
-	public ChannelFuture send(Packet packet) {
-		ChannelFuture channelFuture = ctx.writeAndFlush(packet);
-		channelFuture.addListener(new GenericFutureListener<ChannelFuture>() {
-			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
-				if (!future.isSuccess() && !connection.closing.get()) {
-					throw new Exception("Unexpected exception whilst sending packet", future.cause());
-				}
-			}
-		});
+  public ChannelFuture send(Packet packet) {
+    ChannelFuture channelFuture = ctx.writeAndFlush(packet);
+    channelFuture.addListener(new GenericFutureListener<ChannelFuture>() {
+      @Override
+      public void operationComplete(ChannelFuture future) throws Exception {
+        if (!future.isSuccess() && !connection.closing.get()) {
+          throw new Exception("Unexpected exception whilst sending packet", future.cause());
+        }
+      }
+    });
 
-		return channelFuture;
-	}
+    return channelFuture;
+  }
 
-	public boolean connected( ) {
-		return ctx != null && ctx.channel().isOpen();
-	}
+  public boolean connected( ) {
+    return ctx != null && ctx.channel().isOpen();
+  }
 
-	@Override
-	public void close( ) throws IOException {
-		if (ctx != null) {
-			connection.closing.set(true);
+  @Override
+  public void close( ) throws IOException {
+    if (ctx != null) {
+      connection.closing.set(true);
 
-			if (connection.isConnected()) {
-				send(new PacketDisconnect()).syncUninterruptibly();
-			}
+      if (connection.isConnected()) {
+        send(new PacketDisconnect()).syncUninterruptibly();
+      }
 
-			ctx.channel().disconnect().syncUninterruptibly();
-		}
-	}
+      ctx.channel().disconnect().syncUninterruptibly();
+    }
+  }
 
 }

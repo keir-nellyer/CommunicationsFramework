@@ -14,35 +14,35 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReconnectHandler extends SimpleChannelInboundHandler<Object> {
 
-	private final IConnection connection;
+  private final IConnection connection;
 
-	public ReconnectHandler(IConnection connection) {
-		this.connection = connection;
-	}
+  public ReconnectHandler(IConnection connection) {
+    this.connection = connection;
+  }
 
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-		// discard
-	}
+  @Override
+  protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // discard
+  }
 
-	@Override
-	public void channelInactive(ChannelHandlerContext ctx) {
-		if (!connection.closing.get()) {
-			if (connection instanceof ClientConnection) {
-				connection.logger.warning("Lost connection, attempting reconnect...");
-				ctx.channel().eventLoop().schedule(new Runnable() {
-					@Override
-					public void run( ) {
-						((ClientConnection) connection).connect();
-					}
-				}, 5, TimeUnit.SECONDS);
-			} else {
-				connection.logger.warning("Lost connection, listening for reconnect...");
-			}
+  @Override
+  public void channelInactive(ChannelHandlerContext ctx) {
+    if (!connection.closing.get()) {
+      if (connection instanceof ClientConnection) {
+        connection.logger.warning("Lost connection, attempting reconnect...");
+        ctx.channel().eventLoop().schedule(new Runnable() {
+          @Override
+          public void run( ) {
+            ((ClientConnection) connection).connect();
+          }
+        }, 5, TimeUnit.SECONDS);
+      } else {
+        connection.logger.warning("Lost connection, listening for reconnect...");
+      }
 
-			connection.getConnectionManager().callHook(connection, HookType.LOST_CONNECTION);
-		}
+      connection.getConnectionManager().callHook(connection, HookType.LOST_CONNECTION);
+    }
 
-		connection.closing.set(false);
-	}
+    connection.closing.set(false);
+  }
 }

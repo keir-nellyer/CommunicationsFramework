@@ -18,36 +18,36 @@ import io.netty.handler.timeout.IdleStateHandler;
  */
 public class StandardInitializer extends ChannelInitializer<SocketChannel> {
 
-	// Cache to save on resources
-	private static ObjectEncoder objectEncoder = new ObjectEncoder();
+  // Cache to save on resources
+  private static ObjectEncoder objectEncoder = new ObjectEncoder();
 
-	private final IConnection connection;
+  private final IConnection connection;
 
-	public StandardInitializer(IConnection connection) {
-		this.connection = connection;
-	}
+  public StandardInitializer(IConnection connection) {
+    this.connection = connection;
+  }
 
-	@Override
-	protected void initChannel(SocketChannel socketChannel) throws Exception {
-		ChannelPipeline channelPipeline = socketChannel.pipeline();
+  @Override
+  protected void initChannel(SocketChannel socketChannel) throws Exception {
+    ChannelPipeline channelPipeline = socketChannel.pipeline();
 
-		addObjectHandlers(connection, channelPipeline);
-		addOthers(connection, channelPipeline);
-	}
+    addObjectHandlers(connection, channelPipeline);
+    addOthers(connection, channelPipeline);
+  }
 
-	public static void addObjectHandlers(IConnection connection, ChannelPipeline channelPipeline) {
-		channelPipeline.addLast(
-				objectEncoder,
-				new ObjectDecoder(ClassResolvers.weakCachingResolver(connection.getConnectionManager().classLoader)),
-				new BasicHandler(connection));
-	}
+  public static void addObjectHandlers(IConnection connection, ChannelPipeline channelPipeline) {
+    channelPipeline.addLast(
+        objectEncoder,
+        new ObjectDecoder(ClassResolvers.weakCachingResolver(connection.getConnectionManager().classLoader)),
+        new BasicHandler(connection));
+  }
 
-	public static void addOthers(IConnection connection, ChannelPipeline channelPipeline) {
-		connection.packetHandler = new PacketHandler(connection);
+  public static void addOthers(IConnection connection, ChannelPipeline channelPipeline) {
+    connection.packetHandler = new PacketHandler(connection);
 
-		channelPipeline.addLast(
-				connection.packetHandler,
-				new IdleStateHandler(5000, 0, 0),
-				new ReconnectHandler(connection));
-	}
+    channelPipeline.addLast(
+        connection.packetHandler,
+        new IdleStateHandler(5000, 0, 0),
+        new ReconnectHandler(connection));
+  }
 }

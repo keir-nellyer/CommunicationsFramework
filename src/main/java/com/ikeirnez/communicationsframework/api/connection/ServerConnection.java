@@ -7,9 +7,9 @@ package com.ikeirnez.communicationsframework.api.connection;
  */
 public interface ServerConnection extends Connection {
 
-	/**
-	 * Binds the specified port and begins listening for incoming connections
-	 */
-	public void bind( );
+  /**
+   * Binds the specified port and begins listening for incoming connections
+   */
+  public void bind( );
 
 }

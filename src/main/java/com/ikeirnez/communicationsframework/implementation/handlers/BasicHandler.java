@@ -12,25 +12,25 @@ import java.util.logging.Level;
  */
 public class BasicHandler extends ChannelInboundHandlerAdapter {
 
-	private IConnection connection;
+  private IConnection connection;
 
-	public BasicHandler(IConnection connection) {
-		this.connection = connection;
-	}
+  public BasicHandler(IConnection connection) {
+    this.connection = connection;
+  }
 
-	@Override
-	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		ctx.flush();
-	}
+  @Override
+  public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    ctx.flush();
+  }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (!connection.expectingDisconnect.get()) { // disconnecting causes some mean looking errors, lets suppress them
-			connection.logger.log(Level.SEVERE, "Unexpected exception from downstream, disconnecting...", cause);
-			connection.expectingDisconnect.set(false);
-		}
+  @Override
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    if (!connection.expectingDisconnect.get()) { // disconnecting causes some mean looking errors, lets suppress them
+      connection.logger.log(Level.SEVERE, "Unexpected exception from downstream, disconnecting...", cause);
+      connection.expectingDisconnect.set(false);
+    }
 
-		ctx.close();
-	}
+    ctx.close();
+  }
 
 }
