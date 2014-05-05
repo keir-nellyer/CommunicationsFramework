@@ -49,7 +49,7 @@ Examples are included in the "example" package.
 * Changes made in the "api" package should have appropriate documentation.
 * New line at the end of every file.
 * Each PR should only have one attached commit and it should briefly explain what has been changed.
-* Must compile with JDK 8.
+* Must compile with JDK 7.
 
 # FAQ
 
