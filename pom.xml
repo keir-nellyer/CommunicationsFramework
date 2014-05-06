@@ -25,9 +25,9 @@
     </developers>
 
     <modules>
-        <module>API</module>
-        <module>Netty-Implementation</module>
-        <module>Examples</module>
+        <module>api</module>
+        <module>netty-implementation</module>
+        <module>examples</module>
     </modules>
 
     <properties>
