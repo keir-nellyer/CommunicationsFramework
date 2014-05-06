@@ -5,14 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ikeirnez</groupId>
-        <artifactId>communicationsframework-parent</artifactId>
+        <groupId>com.ikeirnez.communicationsframework</groupId>
+        <artifactId>parent</artifactId>
         <version>3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>communicationsframework-examples</artifactId>
+    <artifactId>examples</artifactId>
     <version>3.0-SNAPSHOT</version>
+
+    <name>CommunicationsFramework Examples</name>
 
     <dependencies>
         <dependency>

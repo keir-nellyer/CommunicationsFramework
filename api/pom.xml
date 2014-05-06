@@ -5,63 +5,63 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ikeirnez</groupId>
-        <artifactId>communicationsframework-parent</artifactId>
+        <groupId>com.ikeirnez.communicationsframework</groupId>
+        <artifactId>parent</artifactId>
         <version>3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>communicationsframework-api</artifactId>
+    <artifactId>api</artifactId>
     <version>3.0-SNAPSHOT</version>
+
+    <name>CommunicationsFramework API</name>
 
     <build>
         <plugins>
+
+            <!-- Generate JavaDoc -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
                 <configuration>
                     <linksource>true</linksource>
-                    <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
-                    <destDir>target/javadocs</destDir>
+                    <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
+                    <destDir>javadoc/</destDir>
                 </configuration>
             </plugin>
+
+            <!-- Upload JavaDoc -->
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>0.9</version>
-                <configuration>
-                    <server>github</server>
-                    <message>Added builds for ${project.version}</message>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <branch>refs/heads/gh-pages</branch>
-                    <includes>
-                        <include>javadocs/**/*</include>
-                        <include>site/**/*</include>
-                    </includes>
-                    <excludes>
-                        <exclude>*.jar</exclude>
-                    </excludes>
-                    <message>Update JavaDocs to match master branch</message>
-                    <repositoryName>CommunicationsFramework</repositoryName>
-                    <repositoryOwner>iKeirNez</repositoryOwner>
-                </configuration>
+                <version>${github.site.version}</version>
                 <executions>
                     <execution>
+                        <id>upload-javadoc</id>
                         <goals>
                             <goal>site</goal>
                         </goals>
                         <phase>site</phase>
+                        <configuration>
+                            <server>github</server>
+                            <message>Added builds for ${project.version}</message>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <branch>refs/heads/gh-pages</branch>
+                            <includes>
+                                <include>javadoc/**/*</include>
+                                <include>site/**/*</include>
+                            </includes>
+                            <excludes>
+                                <exclude>*.jar</exclude>
+                            </excludes>
+                            <message>API JavaDoc for ${project.parent.version}</message>
+                            <repositoryName>CommunicationsFramework</repositoryName>
+                            <repositoryOwner>iKeirNez</repositoryOwner>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-    </dependencies>
 </project>

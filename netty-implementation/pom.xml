@@ -5,14 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ikeirnez</groupId>
-        <artifactId>communicationsframework-parent</artifactId>
+        <groupId>com.ikeirnez.communicationsframework</groupId>
+        <artifactId>parent</artifactId>
         <version>3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>communicationsframework-netty-implementation</artifactId>
+    <artifactId>netty-implementation</artifactId>
     <version>3.0-SNAPSHOT</version>
+
+    <name>CommunicationsFramework Netty Implementation</name>
 
     <build>
         <plugins>
@@ -22,6 +24,7 @@
                 <version>2.2</version>
                 <executions>
                     <execution>
+                        <id>include-libraries</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -30,6 +33,7 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
+                                    <include>com.ikeirnez:communicationsframework-api</include>
                                     <include>io.netty:netty-all</include>
                                 </includes>
                             </artifactSet>
