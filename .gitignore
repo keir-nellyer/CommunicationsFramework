@@ -3,3 +3,5 @@
 .project
 .classpath
 dependency-reduced-pom.xml
+*.iml
+*/mvn-repo
