@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Dependency Information</title>
+    <title>Reactor Dependency Convergence</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -63,11 +63,11 @@
                           <a href="distribution-management.html" title="Distribution Management">Distribution Management</a>
             </li>
                       <li class="none">
-            <strong>Dependency Information</strong>
-          </li>
-                      <li class="none">
-                          <a href="dependency-convergence.html" title="Dependency Convergence">Dependency Convergence</a>
+                          <a href="dependency-info.html" title="Dependency Information">Dependency Information</a>
             </li>
+                      <li class="none">
+            <strong>Dependency Convergence</strong>
+          </li>
                       <li class="none">
                           <a href="source-repository.html" title="Source Repository">Source Repository</a>
             </li>
@@ -107,15 +107,11 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <div class="section"><h2>Dependency Information<a name="Dependency_Information"></a></h2><a name="Dependency_Information"></a><div class="section"><h3>Apache Maven<a name="Apache_Maven"></a></h3><a name="Apache_Maven"></a><div class="source"><pre>&lt;dependency&gt;
-  &lt;groupId&gt;com.ikeirnez.communicationsframework&lt;/groupId&gt;
-  &lt;artifactId&gt;api&lt;/artifactId&gt;
-  &lt;version&gt;3.0-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;</pre></div></div><div class="section"><h3>Apache Buildr<a name="Apache_Buildr"></a></h3><a name="Apache_Buildr"></a><div class="source"><pre>'com.ikeirnez.communicationsframework:api:jar:3.0-SNAPSHOT'</pre></div></div><div class="section"><h3>Apache Ant<a name="Apache_Ant"></a></h3><a name="Apache_Ant"></a><div class="source"><pre>&lt;dependency org=&quot;com.ikeirnez.communicationsframework&quot; name=&quot;api&quot; rev=&quot;3.0-SNAPSHOT&quot;&gt;
-  &lt;artifact name=&quot;api&quot; type=&quot;jar&quot; /&gt;
-&lt;/dependency&gt;</pre></div></div><div class="section"><h3>Groovy Grape<a name="Groovy_Grape"></a></h3><a name="Groovy_Grape"></a><div class="source"><pre>@Grapes(
-@Grab(group='com.ikeirnez.communicationsframework', module='api', version='3.0-SNAPSHOT')
-)</pre></div></div><div class="section"><h3>Grails<a name="Grails"></a></h3><a name="Grails"></a><div class="source"><pre>compile 'com.ikeirnez.communicationsframework:api:3.0-SNAPSHOT'</pre></div></div><div class="section"><h3>Leiningen<a name="Leiningen"></a></h3><a name="Leiningen"></a><div class="source"><pre>[com.ikeirnez.communicationsframework/api &quot;3.0-SNAPSHOT&quot;]</pre></div></div><div class="section"><h3>SBT<a name="SBT"></a></h3><a name="SBT"></a><div class="source"><pre>libraryDependencies += &quot;com.ikeirnez.communicationsframework&quot; %% &quot;api&quot; % &quot;3.0-SNAPSHOT&quot;</pre></div></div></div>
+        <div class="section"><h2>Reactor Dependency Convergence<a name="Reactor_Dependency_Convergence"></a></h2><table border="0" class="bodyTable"><caption>
+  <b>Legend:</b>
+</caption><tr class="a"><td><img alt="success" src="images/icon_success_sml.gif" /></td><td>All projects share one version of the dependency.</td></tr><tr class="b"><td><img alt="error" src="images/icon_error_sml.gif" /></td><td>At least one project has a differing version of the dependency.</td></tr></table><br /><table border="0" class="bodyTable"><caption>
+  <b>Statistics:</b>
+</caption><tr class="a"><th>Number of sub-projects:</th><td>4</td></tr><tr class="b"><th>Number of dependencies (NOD):</th><td>1</td></tr><tr class="a"><th>Number of unique artifacts (NOA):</th><td>1</td></tr><tr class="b"><th>Number of SNAPSHOT artifacts (NOS):</th><td>1</td></tr><tr class="a"><th>Convergence (NOD/NOA):</th><td><img alt="success" src="images/icon_success_sml.gif" />&#160;<b>100%</b></td></tr><tr class="b"><th>Ready for Release (100% Convergence and no SNAPSHOTS):</th><td><img alt="error" src="images/icon_error_sml.gif" />&#160;<b>Error</b><br />You have SNAPSHOT dependencies.</td></tr></table></div><div class="section"><h3>Dependencies used in sub-projects<a name="Dependencies_used_in_sub-projects"></a></h3><div class="section"><h4>com.ikeirnez:communicationsframework-api<a name="com.ikeirnez:communicationsframework-api"></a></h4><table border="0" class="bodyTable"><tr class="a"><td><img alt="success" src="images/icon_success_sml.gif" /></td><td><table border="0" class="bodyTable"><tr class="b"><td width="25%">3.0-SNAPSHOT</td><td><ol style="list-style-type: lower-alpha"><li><a class="externalLink" href="http://github.com/iKeirNez/CommunicationsFramework/examples">com.ikeirnez.communicationsframework:examples</a></li><li><a class="externalLink" href="http://github.com/iKeirNez/CommunicationsFramework/netty-implementation">com.ikeirnez.communicationsframework:netty-implementation</a></li></ol></td></tr></table></td></tr></table></div></div>
       </div>
     </div>
     <div class="clear">
