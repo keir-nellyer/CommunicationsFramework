@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata modelVersion="1.1.0">
   <groupId>com.ikeirnez</groupId>
-  <artifactId>communicationsframework-netty-implementation</artifactId>
+  <artifactId>communicationsframework-examples</artifactId>
   <version>3.0-SNAPSHOT</version>
   <versioning>
     <snapshot>
-      <timestamp>20140506.181752</timestamp>
+      <timestamp>20140506.181809</timestamp>
       <buildNumber>1</buildNumber>
     </snapshot>
-    <lastUpdated>20140506181752</lastUpdated>
+    <lastUpdated>20140506181809</lastUpdated>
     <snapshotVersions>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>3.0-20140506.181752-1</value>
-        <updated>20140506181752</updated>
+        <value>3.0-20140506.181809-1</value>
+        <updated>20140506181809</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>3.0-20140506.181752-1</value>
-        <updated>20140506181752</updated>
+        <value>3.0-20140506.181809-1</value>
+        <updated>20140506181809</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
