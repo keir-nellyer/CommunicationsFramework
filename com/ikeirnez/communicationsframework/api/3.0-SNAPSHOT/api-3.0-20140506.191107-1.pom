@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ikeirnez.communicationsframework</groupId>
+        <artifactId>parent</artifactId>
+        <version>3.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>api</artifactId>
+    <version>3.0-SNAPSHOT</version>
+
+    <name>CommunicationsFramework API</name>
+
+    <build>
+        <plugins>
+
+            <!-- Generate JavaDoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <linksource>true</linksource>
+                    <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
+                    <destDir>javadoc</destDir>
+                </configuration>
+            </plugin>
+
+            <!-- Upload JavaDoc -->
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github.site.version}</version>
+                <executions>
+                    <execution>
+                        <id>upload-javadoc</id>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                        <configuration>
+                            <server>github</server>
+                            <message>Added builds for ${project.version}</message>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <branch>refs/heads/gh-pages</branch>
+                            <includes>
+                                <include>javadoc/**/*</include>
+                                <include>site/**/*</include>
+                            </includes>
+                            <excludes>
+                                <exclude>*.jar</exclude>
+                            </excludes>
+                            <message>API JavaDoc for ${project.parent.version}</message>
+                            <repositoryName>CommunicationsFramework</repositoryName>
+                            <repositoryOwner>iKeirNez</repositoryOwner>
+                            <force>true</force>
+                            <merge>false</merge>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+    </dependencies>
+</project>
