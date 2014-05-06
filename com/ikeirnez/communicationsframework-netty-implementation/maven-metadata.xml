@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
   <groupId>com.ikeirnez</groupId>
-  <artifactId>communicationsframework-parent</artifactId>
+  <artifactId>communicationsframework-netty-implementation</artifactId>
   <versioning>
     <versions>
       <version>3.0-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20140506182224</lastUpdated>
+    <lastUpdated>20140506182232</lastUpdated>
   </versioning>
 </metadata>
