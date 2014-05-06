@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
   <groupId>com.ikeirnez.communicationsframework</groupId>
-  <artifactId>parent</artifactId>
+  <artifactId>api</artifactId>
   <versioning>
     <versions>
       <version>3.0-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20140506201620</lastUpdated>
+    <lastUpdated>20140506201638</lastUpdated>
   </versioning>
 </metadata>
