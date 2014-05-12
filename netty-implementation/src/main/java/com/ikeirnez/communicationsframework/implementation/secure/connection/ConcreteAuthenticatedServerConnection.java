@@ -4,7 +4,6 @@ import com.ikeirnez.communicationsframework.api.connection.AuthenticatedServerCo
 import com.ikeirnez.communicationsframework.implementation.ConcreteConnectionManager;
 import com.ikeirnez.communicationsframework.implementation.secure.handlers.AuthenticatedServerHandler;
 import com.ikeirnez.communicationsframework.implementation.standard.handlers.StandardInitializer;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -22,45 +21,45 @@ import java.io.IOException;
  */
 public class ConcreteAuthenticatedServerConnection extends ConcreteAuthenticatedConnection implements AuthenticatedServerConnection {
 
-  private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-  private final EventLoopGroup workerGroup = new NioEventLoopGroup();
-  private final ServerBootstrap serverBootstrap = new ServerBootstrap();
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+    private final ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-  public ConcreteAuthenticatedServerConnection(ConcreteConnectionManager connectionManager, String hostName, int port, char[] key) {
-    super(connectionManager, hostName, port, key);
+    public ConcreteAuthenticatedServerConnection(ConcreteConnectionManager connectionManager, String hostName, int port, char[] key) {
+        super(connectionManager, hostName, port, key);
 
-    final ConcreteAuthenticatedServerConnection instance = this;
+        final ConcreteAuthenticatedServerConnection instance = this;
 
-    serverBootstrap.group(bossGroup, workerGroup)
-        .channel(NioServerSocketChannel.class)
-        .childHandler(new ChannelInitializer<SocketChannel>() {
-          @Override
-          protected void initChannel(SocketChannel ch) throws Exception {
-            ChannelPipeline channelPipeline = ch.pipeline();
+        serverBootstrap.group(bossGroup, workerGroup)
+                .channel(NioServerSocketChannel.class)
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel ch) throws Exception {
+                        ChannelPipeline channelPipeline = ch.pipeline();
 
-            StandardInitializer.addObjectHandlers(instance, channelPipeline);
-            ch.pipeline().addLast(new AuthenticatedServerHandler(instance));
-            StandardInitializer.addOthers(instance, channelPipeline);
-          }
-        })
-        .localAddress("", getSocketAddress().getPort());
-  }
+                        StandardInitializer.addObjectHandlers(instance, channelPipeline);
+                        ch.pipeline().addLast(new AuthenticatedServerHandler(instance));
+                        StandardInitializer.addOthers(instance, channelPipeline);
+                    }
+                })
+                .localAddress("", getSocketAddress().getPort());
+    }
 
-  public void bind( ) {
-    serverBootstrap.bind().addListener(new GenericFutureListener<ChannelFuture>() {
-      @Override
-      public void operationComplete(ChannelFuture f) throws Exception {
-        if (!f.isSuccess()) {
-          throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
-        }
-      }
-    });
-  }
+    public void bind() {
+        serverBootstrap.bind().addListener(new GenericFutureListener<ChannelFuture>() {
+            @Override
+            public void operationComplete(ChannelFuture f) throws Exception {
+                if (!f.isSuccess()) {
+                    throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
+                }
+            }
+        });
+    }
 
-  @Override
-  public void close( ) throws IOException {
-    super.close();
-    bossGroup.shutdownGracefully().syncUninterruptibly();
-    workerGroup.shutdownGracefully().syncUninterruptibly();
-  }
+    @Override
+    public void close() throws IOException {
+        super.close();
+        bossGroup.shutdownGracefully().syncUninterruptibly();
+        workerGroup.shutdownGracefully().syncUninterruptibly();
+    }
 }

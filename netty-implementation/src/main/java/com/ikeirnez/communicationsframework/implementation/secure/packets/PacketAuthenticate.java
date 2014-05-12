@@ -7,15 +7,15 @@ import com.ikeirnez.communicationsframework.api.packets.Packet;
  */
 public class PacketAuthenticate implements Packet {
 
-  private static final long serialVersionUID = 8253624944786768643L;
-  private final char[] key;
+    private static final long serialVersionUID = 8253624944786768643L;
+    private final char[] key;
 
-  public PacketAuthenticate(char[] key) {
-    super();
-    this.key = key;
-  }
+    public PacketAuthenticate(char[] key) {
+        super();
+        this.key = key;
+    }
 
-  public char[] getKey( ) {
-    return key;
-  }
+    public char[] getKey() {
+        return key;
+    }
 }

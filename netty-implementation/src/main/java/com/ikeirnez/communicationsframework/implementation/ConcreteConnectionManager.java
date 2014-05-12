@@ -1,5 +1,20 @@
 package com.ikeirnez.communicationsframework.implementation;
 
+import com.ikeirnez.communicationsframework.api.Callback;
+import com.ikeirnez.communicationsframework.api.HookType;
+import com.ikeirnez.communicationsframework.api.connection.AuthenticatedClientConnection;
+import com.ikeirnez.communicationsframework.api.connection.AuthenticatedServerConnection;
+import com.ikeirnez.communicationsframework.api.connection.Connection;
+import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
+import com.ikeirnez.communicationsframework.api.packets.Packet;
+import com.ikeirnez.communicationsframework.api.packets.PacketHandler;
+import com.ikeirnez.communicationsframework.api.packets.PacketListener;
+import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedClientConnection;
+import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedServerConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteClientConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,162 +23,147 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.ikeirnez.communicationsframework.api.connection.AuthenticatedClientConnection;
-import com.ikeirnez.communicationsframework.api.connection.AuthenticatedServerConnection;
-import com.ikeirnez.communicationsframework.api.connection.Connection;
-import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
-import com.ikeirnez.communicationsframework.api.packets.Packet;
-import com.ikeirnez.communicationsframework.api.packets.PacketHandler;
-import com.ikeirnez.communicationsframework.api.packets.PacketListener;
-import com.ikeirnez.communicationsframework.api.Callback;
-import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedClientConnection;
-import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedServerConnection;
-import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteClientConnection;
-import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
-import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
-
 /**
  * Created by iKeirNez on 06/04/2014.
  */
 public class ConcreteConnectionManager implements ConnectionManager {
 
-  public final List<ConcreteConnection> connections = Collections.synchronizedList(new ArrayList<ConcreteConnection>());
-  private final Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
-  private final Map<HookType, List<Callback<Connection>>> hooks = new ConcurrentHashMap<>();
-  public final ClassLoader classLoader;
+    public final List<ConcreteConnection> connections = Collections.synchronizedList(new ArrayList<ConcreteConnection>());
+    public final ClassLoader classLoader;
+    private final Map<Class<? extends Packet>, List<PacketListener>> listeners = new ConcurrentHashMap<>();
+    private final Map<HookType, List<Callback<Connection>>> hooks = new ConcurrentHashMap<>();
 
-  /**
-   * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
-   * @deprecated see {@link com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory#getNewConnectionManager(ClassLoader)}
-   */
-  @Deprecated
-  public ConcreteConnectionManager(ClassLoader classLoader) {
-    this.classLoader = classLoader;
-  }
-
-  @Override
-  public ConcreteClientConnection newClientConnection(String serverddress, int port) {
-    return new ConcreteClientConnection(this, serverddress, port);
-  }
-
-  @Override
-  public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverddress, int port, char[] key) {
-    return new ConcreteAuthenticatedClientConnection(this, serverddress, port, key);
-  }
-
-  @Override
-  public ConcreteServerConnection newServerConnection(String clientddress, int port) {
-    return new ConcreteServerConnection(this, clientddress, port);
-  }
-
-  @Override
-  public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientddress, int port, char[] key) {
-    return new ConcreteAuthenticatedServerConnection(this, clientddress, port, key);
-  }
-
-  @Override
-  public void registerListener(PacketListener packetListener) {
-    for (Method method : packetListener.getClass().getMethods()) {
-      if (isMethodApplicable(method)) {
-        @SuppressWarnings("unchecked")
-        Class<? extends Packet> parameter = (Class<? extends Packet>) (method.getParameterTypes().length == 2 ? method.getParameterTypes()[1] : method.getParameterTypes()[0]);
-        List<PacketListener> list = listeners.containsKey(parameter) ? listeners.get(parameter) : new ArrayList<PacketListener>();
-        list.add(packetListener);
-        listeners.put(parameter, list);
-      } else if (method.isAnnotationPresent(PacketHandler.class)) {
-        throw new IllegalArgumentException("Method " + packetListener.getClass() + "#" + method.getName() + " has @PacketHandler annotation but does not take the correct parameters");
-      }
-    }
-  }
-
-  @Override
-  public boolean isListenerRegistered(PacketListener packetListener) {
-    for (Class<? extends Packet> clazz : listeners.keySet()) {
-      List<PacketListener> list = listeners.get(clazz);
-
-      if (list.contains(packetListener)) {
-        return true;
-      }
+    /**
+     * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
+     * @deprecated see {@link com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory#getNewConnectionManager(ClassLoader)}
+     */
+    @Deprecated
+    public ConcreteConnectionManager(ClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 
-    return false;
-  }
-
-  @Override
-  public void unregisterListener(PacketListener packetListener) {
-    for (Class<? extends Packet> clazz : listeners.keySet()) {
-      List<PacketListener> list = listeners.get(clazz);
-      list.remove(packetListener);
-      listeners.put(clazz, list);
+    @Override
+    public ConcreteClientConnection newClientConnection(String serverddress, int port) {
+        return new ConcreteClientConnection(this, serverddress, port);
     }
-  }
 
-  public void callListeners(ConcreteConnection connection, Packet packet) {
-    if (listeners.containsKey(packet.getClass())) {
-      for (PacketListener packetListener : listeners.get(packet.getClass())) {
+    @Override
+    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverddress, int port, char[] key) {
+        return new ConcreteAuthenticatedClientConnection(this, serverddress, port, key);
+    }
+
+    @Override
+    public ConcreteServerConnection newServerConnection(String clientddress, int port) {
+        return new ConcreteServerConnection(this, clientddress, port);
+    }
+
+    @Override
+    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientddress, int port, char[] key) {
+        return new ConcreteAuthenticatedServerConnection(this, clientddress, port, key);
+    }
+
+    @Override
+    public void registerListener(PacketListener packetListener) {
         for (Method method : packetListener.getClass().getMethods()) {
-          if (isMethodApplicable(packet, method)) {
-            try {
-              if (method.getParameterTypes().length == 2) {
-                method.invoke(packetListener, connection, packet);
-              } else {
-                method.invoke(packetListener, packet);
-              }
-            } catch (Throwable e) {
-              System.out.println("Error whilst invoking listener\nPacket: " + packet.getClass().getName() + "\nMethod: " + packetListener.getClass().getName() + "#" + method.getName());
-              e.printStackTrace();
+            if (isMethodApplicable(method)) {
+                @SuppressWarnings("unchecked")
+                Class<? extends Packet> parameter = (Class<? extends Packet>) (method.getParameterTypes().length == 2 ? method.getParameterTypes()[1] : method.getParameterTypes()[0]);
+                List<PacketListener> list = listeners.containsKey(parameter) ? listeners.get(parameter) : new ArrayList<PacketListener>();
+                list.add(packetListener);
+                listeners.put(parameter, list);
+            } else if (method.isAnnotationPresent(PacketHandler.class)) {
+                throw new IllegalArgumentException("Method " + packetListener.getClass() + "#" + method.getName() + " has @PacketHandler annotation but does not take the correct parameters");
             }
-          }
         }
-      }
     }
-  }
 
-  private boolean isMethodApplicable(Packet packet, Method method) {
-    return isMethodApplicable(packet.getClass(), method);
-  }
+    @Override
+    public boolean isListenerRegistered(PacketListener packetListener) {
+        for (Class<? extends Packet> clazz : listeners.keySet()) {
+            List<PacketListener> list = listeners.get(clazz);
 
-  private boolean isMethodApplicable(Class<? extends Packet> packet, Method method) {
-    Class<?>[] parameters = method.getParameterTypes();
-    return method.isAnnotationPresent(PacketHandler.class)
-        && (((parameters.length == 1) && packet.isAssignableFrom(parameters[0])) || ((parameters.length == 2) && parameters[0].equals(Connection.class) && packet.isAssignableFrom(parameters[1])));
-  }
+            if (list.contains(packetListener)) {
+                return true;
+            }
+        }
 
-  private boolean isMethodApplicable(Method method) {
-    Class<?>[] parameters = method.getParameterTypes();
-    return method.isAnnotationPresent(PacketHandler.class)
-        && (((parameters.length == 1) && Packet.class.isAssignableFrom(parameters[0])) || ((parameters.length == 2) && parameters[0].equals(Connection.class) && Packet.class
-            .isAssignableFrom(parameters[1])));
-  }
-
-  @Override
-  public void addHook(HookType hookType, Callback<Connection> consumer) {
-    List<Callback<Connection>> list = hooks.containsKey(hookType) ? hooks.get(hookType) : new ArrayList<Callback<Connection>>();
-    list.add(consumer);
-    hooks.put(hookType, list);
-  }
-
-  public void callHook(ConcreteConnection connection, HookType hookType) {
-    if (hooks.containsKey(hookType)) {
-      for (Callback<Connection> consumer : hooks.get(hookType)) {
-        consumer.call(connection);
-      }
+        return false;
     }
-  }
 
-  @Override
-  public List<Connection> getConnections( ) {
-    return new ArrayList<Connection>(connections); // todo cache
-  }
-
-  @Override
-  public void close( ) throws IOException {
-    System.out.println("Closing all connections...");
-
-    for (ConcreteConnection connection : new ArrayList<>(connections)) { // create copy so we don't get Concurrent issues
-      connection.close(false);
+    @Override
+    public void unregisterListener(PacketListener packetListener) {
+        for (Class<? extends Packet> clazz : listeners.keySet()) {
+            List<PacketListener> list = listeners.get(clazz);
+            list.remove(packetListener);
+            listeners.put(clazz, list);
+        }
     }
-  }
+
+    public void callListeners(ConcreteConnection connection, Packet packet) {
+        if (listeners.containsKey(packet.getClass())) {
+            for (PacketListener packetListener : listeners.get(packet.getClass())) {
+                for (Method method : packetListener.getClass().getMethods()) {
+                    if (isMethodApplicable(packet, method)) {
+                        try {
+                            if (method.getParameterTypes().length == 2) {
+                                method.invoke(packetListener, connection, packet);
+                            } else {
+                                method.invoke(packetListener, packet);
+                            }
+                        } catch (Throwable e) {
+                            System.out.println("Error whilst invoking listener\nPacket: " + packet.getClass().getName() + "\nMethod: " + packetListener.getClass().getName() + "#" + method.getName());
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isMethodApplicable(Packet packet, Method method) {
+        return isMethodApplicable(packet.getClass(), method);
+    }
+
+    private boolean isMethodApplicable(Class<? extends Packet> packet, Method method) {
+        Class<?>[] parameters = method.getParameterTypes();
+        return method.isAnnotationPresent(PacketHandler.class)
+                && (((parameters.length == 1) && packet.isAssignableFrom(parameters[0])) || ((parameters.length == 2) && parameters[0].equals(Connection.class) && packet.isAssignableFrom(parameters[1])));
+    }
+
+    private boolean isMethodApplicable(Method method) {
+        Class<?>[] parameters = method.getParameterTypes();
+        return method.isAnnotationPresent(PacketHandler.class)
+                && (((parameters.length == 1) && Packet.class.isAssignableFrom(parameters[0])) || ((parameters.length == 2) && parameters[0].equals(Connection.class) && Packet.class
+                .isAssignableFrom(parameters[1])));
+    }
+
+    @Override
+    public void addHook(HookType hookType, Callback<Connection> consumer) {
+        List<Callback<Connection>> list = hooks.containsKey(hookType) ? hooks.get(hookType) : new ArrayList<Callback<Connection>>();
+        list.add(consumer);
+        hooks.put(hookType, list);
+    }
+
+    public void callHook(ConcreteConnection connection, HookType hookType) {
+        if (hooks.containsKey(hookType)) {
+            for (Callback<Connection> consumer : hooks.get(hookType)) {
+                consumer.call(connection);
+            }
+        }
+    }
+
+    @Override
+    public List<Connection> getConnections() {
+        return new ArrayList<Connection>(connections); // todo cache
+    }
+
+    @Override
+    public void close() throws IOException {
+        System.out.println("Closing all connections...");
+
+        for (ConcreteConnection connection : new ArrayList<>(connections)) { // create copy so we don't get Concurrent issues
+            connection.close(false);
+        }
+    }
 
 }

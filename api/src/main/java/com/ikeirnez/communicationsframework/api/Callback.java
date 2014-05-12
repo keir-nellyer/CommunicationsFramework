@@ -8,11 +8,11 @@ package com.ikeirnez.communicationsframework.api;
  */
 public interface Callback<T> {
 
-  /**
-   * Accept an input value.
-   *
-   * @param t The input object.
-   */
-  public void call(T t);
+    /**
+     * Accept an input value.
+     *
+     * @param t The input object.
+     */
+    public void call(T t);
 
 }

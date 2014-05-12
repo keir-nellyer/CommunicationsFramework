@@ -7,15 +7,15 @@ import com.ikeirnez.communicationsframework.api.packets.Packet;
  */
 public class PacketTest implements Packet {
 
-  private static final long serialVersionUID = -3355162086281993659L;
+    private static final long serialVersionUID = -3355162086281993659L;
 
-  private final String randomString;
+    private final String randomString;
 
-  public PacketTest(String randomString) {
-    this.randomString = randomString;
-  }
+    public PacketTest(String randomString) {
+        this.randomString = randomString;
+    }
 
-  public String getRandomString( ) {
-    return randomString;
-  }
+    public String getRandomString() {
+        return randomString;
+    }
 }

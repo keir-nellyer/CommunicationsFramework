@@ -4,7 +4,6 @@ import com.ikeirnez.communicationsframework.implementation.handlers.BasicHandler
 import com.ikeirnez.communicationsframework.implementation.handlers.PacketHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.ReconnectHandler;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
-
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -18,36 +17,36 @@ import io.netty.handler.timeout.IdleStateHandler;
  */
 public class StandardInitializer extends ChannelInitializer<SocketChannel> {
 
-  // Cache to save on resources
-  private static ObjectEncoder objectEncoder = new ObjectEncoder();
+    // Cache to save on resources
+    private static ObjectEncoder objectEncoder = new ObjectEncoder();
 
-  private final ConcreteConnection connection;
+    private final ConcreteConnection connection;
 
-  public StandardInitializer(ConcreteConnection connection) {
-    this.connection = connection;
-  }
+    public StandardInitializer(ConcreteConnection connection) {
+        this.connection = connection;
+    }
 
-  @Override
-  protected void initChannel(SocketChannel socketChannel) throws Exception {
-    ChannelPipeline channelPipeline = socketChannel.pipeline();
+    public static void addObjectHandlers(ConcreteConnection connection, ChannelPipeline channelPipeline) {
+        channelPipeline.addLast(
+                objectEncoder,
+                new ObjectDecoder(ClassResolvers.weakCachingResolver(connection.getConnectionManager().classLoader)),
+                new BasicHandler(connection));
+    }
 
-    addObjectHandlers(connection, channelPipeline);
-    addOthers(connection, channelPipeline);
-  }
+    public static void addOthers(ConcreteConnection connection, ChannelPipeline channelPipeline) {
+        connection.packetHandler = new PacketHandler(connection);
 
-  public static void addObjectHandlers(ConcreteConnection connection, ChannelPipeline channelPipeline) {
-    channelPipeline.addLast(
-        objectEncoder,
-        new ObjectDecoder(ClassResolvers.weakCachingResolver(connection.getConnectionManager().classLoader)),
-        new BasicHandler(connection));
-  }
+        channelPipeline.addLast(
+                connection.packetHandler,
+                new IdleStateHandler(5000, 0, 0),
+                new ReconnectHandler(connection));
+    }
 
-  public static void addOthers(ConcreteConnection connection, ChannelPipeline channelPipeline) {
-    connection.packetHandler = new PacketHandler(connection);
+    @Override
+    protected void initChannel(SocketChannel socketChannel) throws Exception {
+        ChannelPipeline channelPipeline = socketChannel.pipeline();
 
-    channelPipeline.addLast(
-        connection.packetHandler,
-        new IdleStateHandler(5000, 0, 0),
-        new ReconnectHandler(connection));
-  }
+        addObjectHandlers(connection, channelPipeline);
+        addOthers(connection, channelPipeline);
+    }
 }

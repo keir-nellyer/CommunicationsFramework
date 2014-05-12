@@ -5,6 +5,6 @@ package com.ikeirnez.communicationsframework.examples.authentication;
  */
 public class Common {
 
-  public static char[] KEY = "SuperAwesomePassword".toCharArray();
+    public static char[] KEY = "SuperAwesomePassword".toCharArray();
 
 }

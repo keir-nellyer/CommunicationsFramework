@@ -1,11 +1,11 @@
 package com.ikeirnez.communicationsframework.examples.standard.client;
 
+import com.ikeirnez.communicationsframework.api.Callback;
+import com.ikeirnez.communicationsframework.api.HookType;
 import com.ikeirnez.communicationsframework.api.connection.ClientConnection;
 import com.ikeirnez.communicationsframework.api.connection.Connection;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory;
-import com.ikeirnez.communicationsframework.api.Callback;
-import com.ikeirnez.communicationsframework.api.HookType;
 import com.ikeirnez.communicationsframework.examples.PacketTest;
 
 /**
@@ -14,31 +14,30 @@ import com.ikeirnez.communicationsframework.examples.PacketTest;
  */
 public class StandardClientExampleMain {
 
-  public static void main(String[] args) {
-    new StandardClientExampleMain("localhost", 25566); // connect to localhost:25566
-  }
+    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
+    public ClientConnection connection;
+    public StandardClientExampleMain(String host, int port) {
+        // its a good idea to register hooks and listeners before attempting the connection
+        // this is due to read and writes being handled asynchronously and therefore we might
+        // not register everything in time
 
-  public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
-  public ClientConnection connection;
+        connectionManager.addHook(HookType.CONNECTED, new Callback<Connection>() {
+            @Override
+            public void call(Connection c) {
+                // add hook for when we are connected
+                System.out.println("Woo! looks like we're connected");
+            }
+        });
 
-  public StandardClientExampleMain(String host, int port) {
-    // its a good idea to register hooks and listeners before attempting the connection
-    // this is due to read and writes being handled asynchronously and therefore we might
-    // not register everything in time
+        connectionManager.registerListener(new StandardClientExampleListener()); // register listener for reply
 
-    connectionManager.addHook(HookType.CONNECTED, new Callback<Connection>() {
-      @Override
-      public void call(Connection c) {
-        // add hook for when we are connected
-        System.out.println("Woo! looks like we're connected");
-      }
-    });
+        connection = connectionManager.newClientConnection(host, port); // create the connection instance and populate it with our data
+        connection.connect(); // attempt connecting asynchronously
+        connection.sendPacket(new PacketTest("Hey, this message was sent from the client")); // send a packet to the server
+    }
 
-    connectionManager.registerListener(new StandardClientExampleListener()); // register listener for reply
-
-    connection = connectionManager.newClientConnection(host, port); // create the connection instance and populate it with our data
-    connection.connect(); // attempt connecting asynchronously
-    connection.sendPacket(new PacketTest("Hey, this message was sent from the client")); // send a packet to the server
-  }
+    public static void main(String[] args) {
+        new StandardClientExampleMain("localhost", 25566); // connect to localhost:25566
+    }
 
 }

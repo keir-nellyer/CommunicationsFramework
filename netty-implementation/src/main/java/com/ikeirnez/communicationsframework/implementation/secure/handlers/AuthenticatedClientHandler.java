@@ -4,7 +4,6 @@ import com.ikeirnez.communicationsframework.api.HookType;
 import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedClientConnection;
 import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticate;
 import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticationStatus;
-
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -13,46 +12,46 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class AuthenticatedClientHandler extends ChannelInboundHandlerAdapter {
 
-  private ConcreteAuthenticatedClientConnection connection;
+    private ConcreteAuthenticatedClientConnection connection;
 
-  public AuthenticatedClientHandler(ConcreteAuthenticatedClientConnection connection) {
-    this.connection = connection;
-  }
-
-  @Override
-  public void channelActive(ChannelHandlerContext ctx) throws Exception {
-    if (!connection.authenticated.get()) {
-      ctx.channel().writeAndFlush(new PacketAuthenticate(connection.key));
-    } else {
-      ctx.fireChannelActive();
+    public AuthenticatedClientHandler(ConcreteAuthenticatedClientConnection connection) {
+        this.connection = connection;
     }
-  }
 
-  @Override
-  public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-    if (!connection.authenticated.get()) {
-      if (msg instanceof PacketAuthenticationStatus) {
-        PacketAuthenticationStatus packet = (PacketAuthenticationStatus) msg;
-
-        if (packet.isAllowed()) {
-          connection.authenticated.set(true);
-          connection.logger.info("Authentication successful");
-          ctx.fireChannelActive();
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        if (!connection.authenticated.get()) {
+            ctx.channel().writeAndFlush(new PacketAuthenticate(connection.key));
         } else {
-          connection.logger.info("Authentication failed");
-          connection.expectingDisconnect.set(true);
-          connection.getConnectionManager().callHook(connection, HookType.AUTHENTICATION_FAILED);
+            ctx.fireChannelActive();
         }
-      }
-    } else {
-      ctx.fireChannelRead(msg);
     }
-  }
 
-  @Override
-  public void channelInactive(ChannelHandlerContext ctx) throws Exception { // makes sure we re-authenticate when reconnecting
-    connection.authenticated.set(false);
-    ctx.fireChannelInactive();
-  }
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (!connection.authenticated.get()) {
+            if (msg instanceof PacketAuthenticationStatus) {
+                PacketAuthenticationStatus packet = (PacketAuthenticationStatus) msg;
+
+                if (packet.isAllowed()) {
+                    connection.authenticated.set(true);
+                    connection.logger.info("Authentication successful");
+                    ctx.fireChannelActive();
+                } else {
+                    connection.logger.info("Authentication failed");
+                    connection.expectingDisconnect.set(true);
+                    connection.getConnectionManager().callHook(connection, HookType.AUTHENTICATION_FAILED);
+                }
+            }
+        } else {
+            ctx.fireChannelRead(msg);
+        }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception { // makes sure we re-authenticate when reconnecting
+        connection.authenticated.set(false);
+        ctx.fireChannelInactive();
+    }
 
 }

@@ -11,10 +11,10 @@ import com.ikeirnez.communicationsframework.examples.PacketTest;
  */
 public class AuthenticatedServerExampleListener implements PacketListener {
 
-  @PacketHandler
-  public void onTestPacket(Connection connection, PacketTest packet) { // this will be run when we receive the packet from the client, also notice how the first parameter is optional
-    System.out.println("Received packet, data: " + packet.getRandomString() + "\nSending reply"); // print the data
-    connection.sendPacket(new PacketTest("Hey Client! I got your message, here's a reply!")); // reply
-  }
+    @PacketHandler
+    public void onTestPacket(Connection connection, PacketTest packet) { // this will be run when we receive the packet from the client, also notice how the first parameter is optional
+        System.out.println("Received packet, data: " + packet.getRandomString() + "\nSending reply"); // print the data
+        connection.sendPacket(new PacketTest("Hey Client! I got your message, here's a reply!")); // reply
+    }
 
 }
