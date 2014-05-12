@@ -61,7 +61,7 @@ public interface ConnectionManager extends Closeable {
 
     /**
      * Registers an instance as being a listener, any packets received from linked Connection will be passed to applicable methods
-     * <p/>
+     *
      * Methods must have the {@link com.ikeirnez.communicationsframework.api.packets.PacketHandler} annotation
      * Methods have an optional first parameter {@link com.ikeirnez.communicationsframework.api.connection.Connection} and a required second parameter implementing {@link com.ikeirnez.communicationsframework.api.packets.Packet}
      *
