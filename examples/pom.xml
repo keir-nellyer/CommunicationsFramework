@@ -18,8 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ikeirnez</groupId>
-            <artifactId>communicationsframework-api</artifactId>
+            <groupId>com.ikeirnez.communicationsframework</groupId>
+            <artifactId>api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

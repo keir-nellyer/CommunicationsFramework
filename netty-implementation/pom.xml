@@ -33,7 +33,7 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <include>com.ikeirnez:communicationsframework-api</include>
+                                    <include>com.ikeirnez.communicationsframework:api</include>
                                     <include>io.netty:netty-all</include>
                                 </includes>
                             </artifactSet>
@@ -45,9 +45,14 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.ikeirnez</groupId>
-            <artifactId>communicationsframework-api</artifactId>
+            <groupId>com.ikeirnez.communicationsframework</groupId>
+            <artifactId>api</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
         </dependency>
     </dependencies>
 </project>
