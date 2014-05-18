@@ -2,6 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ikeirnez.communicationsframework</groupId>
     <artifactId>parent</artifactId>
@@ -9,6 +16,7 @@
     <packaging>pom</packaging>
 
     <name>CommunicationsFramework Parent</name>
+    <description>Java Socket Communication between Clients and Servers made easy.</description>
     <url>http://github.com/iKeirNez/CommunicationsFramework</url>
 
     <licenses>
@@ -44,6 +52,12 @@
         </repository>
     </distributionManagement>
 
+    <scm>
+        <connection>scm:git:git@github.com:iKeirNez/CommunicationsFramework.git</connection>
+        <developerConnection>scm:git:git@github.com:iKeirNez/CommunicationsFramework.git</developerConnection>
+        <url>git@github.com:iKeirNez/CommunicationsFramework.git</url>
+    </scm>
+
     <build>
         <finalName>${project.name}-${project.artifactId}</finalName>
 
@@ -57,43 +71,24 @@
                 </configuration>
             </plugin>
 
-            <!-- Create local repo -->
+            <!-- Disable Maven Site -->
             <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
                 <configuration>
-                    <altDeploymentRepository>internal.repo::default::file://${project.basedir}/mvn-repo
-                    </altDeploymentRepository>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
 
-            <!-- Upload local Maven repo to 'mvn-repo' branch -->
+            <!-- Disable JavaDoc -->
             <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github.site.version}</version>
-                <executions>
-                    <execution>
-                        <id>deploy-maven-repo</id>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <message>Maven artifacts for ${project.name} (${project.version})</message>
-                            <noJekyll>true</noJekyll>
-                            <outputDirectory>${project.basedir}/mvn-repo</outputDirectory>
-                            <branch>refs/heads/mvn-repo</branch>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                            <repositoryName>CommunicationsFramework</repositoryName>
-                            <repositoryOwner>iKeirNez</repositoryOwner>
-                            <server>github</server>
-                            <merge>true</merge>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>

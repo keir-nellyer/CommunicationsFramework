@@ -18,7 +18,6 @@
 
     <build>
         <plugins>
-
             <!-- Generate JavaDoc -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -28,6 +27,9 @@
                     <linksource>true</linksource>
                     <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
                     <destDir>javadoc/</destDir>
+                    <source>1.7</source>
+                    <sourcepath>${basedir}/src/main/java/</sourcepath>
+                    <skip>false</skip>
                 </configuration>
             </plugin>
 
@@ -58,6 +60,7 @@
                             <message>API JavaDoc for ${project.parent.version}</message>
                             <repositoryName>CommunicationsFramework</repositoryName>
                             <repositoryOwner>iKeirNez</repositoryOwner>
+                            <skip>false</skip>
                         </configuration>
                     </execution>
                 </executions>
