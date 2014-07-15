@@ -15,7 +15,7 @@ import com.ikeirnez.communicationsframework.examples.authentication.Common;
  */
 public class AuthenticatedClientExampleMain {
 
-    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
+    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewNettyConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
     public AuthenticatedClientConnection connection;
     public AuthenticatedClientExampleMain(String host, int port, char[] key) {
         // its a good idea to register hooks and listeners before attempting the connection

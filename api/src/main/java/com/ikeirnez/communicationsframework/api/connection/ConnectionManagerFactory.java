@@ -1,5 +1,7 @@
 package com.ikeirnez.communicationsframework.api.connection;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Static class used for getting a new {@link com.ikeirnez.communicationsframework.api.connection.ConnectionManager}
  *
@@ -13,9 +15,16 @@ public class ConnectionManagerFactory {
      * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
      * @return The new instance
      */
-    @SuppressWarnings("deprecation")
-    public static ConnectionManager getNewConnectionManager(ClassLoader classLoader) {
-        return null; /*new IConnectionManager(classLoader); // this should be our only ever reference to the internals from the API*/ // todo
+    public static ConnectionManager getNewNettyConnectionManager(ClassLoader classLoader) {
+        try {
+            return (ConnectionManager) Class.forName("com.ikeirnez.communicationsframework.implementation.ConcreteConnectionManager").getConstructor(ClassLoader.class).newInstance(classLoader);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("ConcreteConnectionManager not found, make sure you've included the implementation in your class path", e.getCause());
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }

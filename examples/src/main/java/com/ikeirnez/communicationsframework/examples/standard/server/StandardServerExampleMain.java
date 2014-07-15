@@ -13,7 +13,7 @@ import com.ikeirnez.communicationsframework.api.connection.ServerConnection;
  */
 public class StandardServerExampleMain {
 
-    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
+    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewNettyConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
     public ServerConnection connection;
     public StandardServerExampleMain(String host, int port) {
         // its a good idea to register hooks and listeners before attempting the connection

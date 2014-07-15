@@ -5,3 +5,5 @@
 dependency-reduced-pom.xml
 *.iml
 */mvn-repo
+*.releaseBackup
+release.properties

@@ -22,10 +22,10 @@ public class ConcreteClientConnection extends ConcreteConnection implements Clie
     public final Bootstrap bootstrap = new Bootstrap();
     private final EventLoopGroup group = new NioEventLoopGroup();
 
-    public ConcreteClientConnection(ConcreteConnectionManager connectionManager, String serverddress, int port) {
-        super(connectionManager, serverddress, port);
+    public ConcreteClientConnection(ConcreteConnectionManager connectionManager, String serverAddress, int port) {
+        super(connectionManager, serverAddress, port);
 
-        if (serverddress == null || serverddress.isEmpty()) {
+        if (serverAddress == null || serverAddress.isEmpty()) {
             throw new UnsupportedOperationException("Server Address cannot be null or empty");
         }
 

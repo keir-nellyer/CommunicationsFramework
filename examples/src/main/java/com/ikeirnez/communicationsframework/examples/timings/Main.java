@@ -21,7 +21,7 @@ public class Main {
     public static final NumberFormat numberFormatDecimal = NumberFormat.getNumberInstance(); // for rounding percentages & averages
     public static final NumberFormat numberFormatGeneral = NumberFormat.getNumberInstance(); // for display things without decimals
 
-    public static ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(Main.class.getClassLoader());
+    public static ConnectionManager connectionManager = ConnectionManagerFactory.getNewNettyConnectionManager(Main.class.getClassLoader());
     public static ServerConnection serverConnection = connectionManager.newServerConnection("localhost", 25565);
     public static ClientConnection clientConnection = connectionManager.newClientConnection("localhost", 25565);
 

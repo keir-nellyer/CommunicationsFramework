@@ -14,7 +14,7 @@ import com.ikeirnez.communicationsframework.examples.PacketTest;
  */
 public class StandardClientExampleMain {
 
-    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
+    public ConnectionManager connectionManager = ConnectionManagerFactory.getNewNettyConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
     public ClientConnection connection;
     public StandardClientExampleMain(String host, int port) {
         // its a good idea to register hooks and listeners before attempting the connection

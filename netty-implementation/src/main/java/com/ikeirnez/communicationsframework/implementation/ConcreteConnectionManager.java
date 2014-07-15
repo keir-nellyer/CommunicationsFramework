@@ -35,31 +35,38 @@ public class ConcreteConnectionManager implements ConnectionManager {
 
     /**
      * @param classLoader The class loader (can be gotten with getClass#getClassLoader)
-     * @deprecated see {@link com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory#getNewConnectionManager(ClassLoader)}
+     * @deprecated see {@link com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory#getNewNettyConnectionManager(ClassLoader)}
      */
     @Deprecated
     public ConcreteConnectionManager(ClassLoader classLoader) {
         this.classLoader = classLoader;
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                close(); // todo test
+            }
+        }));
     }
 
     @Override
-    public ConcreteClientConnection newClientConnection(String serverddress, int port) {
-        return new ConcreteClientConnection(this, serverddress, port);
+    public ConcreteClientConnection newClientConnection(String serverAddress, int port) {
+        return new ConcreteClientConnection(this, serverAddress, port);
     }
 
     @Override
-    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverddress, int port, char[] key) {
-        return new ConcreteAuthenticatedClientConnection(this, serverddress, port, key);
+    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverAddress, int port, char[] key) {
+        return new ConcreteAuthenticatedClientConnection(this, serverAddress, port, key);
     }
 
     @Override
-    public ConcreteServerConnection newServerConnection(String clientddress, int port) {
-        return new ConcreteServerConnection(this, clientddress, port);
+    public ConcreteServerConnection newServerConnection(String clientAddress, int port) {
+        return new ConcreteServerConnection(this, clientAddress, port);
     }
 
     @Override
-    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientddress, int port, char[] key) {
-        return new ConcreteAuthenticatedServerConnection(this, clientddress, port, key);
+    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientAddress, int port, char[] key) {
+        return new ConcreteAuthenticatedServerConnection(this, clientAddress, port, key);
     }
 
     @Override
@@ -158,11 +165,25 @@ public class ConcreteConnectionManager implements ConnectionManager {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close(){
+        try {
+            close(true);
+        } catch (IOException e) { // since we ignore exceptions, this shouldn't be thrown
+            e.printStackTrace();
+        }
+    }
+
+    public void close(boolean silent) throws IOException {
         System.out.println("Closing all connections...");
 
         for (ConcreteConnection connection : new ArrayList<>(connections)) { // create copy so we don't get Concurrent issues
-            connection.close(false);
+            try {
+                connection.close(false);
+            } catch (IOException e){
+                if (!silent){
+                    throw e;
+                }
+            }
         }
     }
 
