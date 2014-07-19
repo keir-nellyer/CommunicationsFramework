@@ -24,40 +24,40 @@ public interface ConnectionManager extends Closeable {
     /**
      * Returns a new instance of a client connection
      *
-     * @param serverddress The address of the server we should connect to
+     * @param serverAddress The address of the server we should connect to
      * @param port         The port we should use to connect
      * @return The Client Connection
      */
-    public ClientConnection newClientConnection(String serverddress, int port);
+    public ClientConnection newClientConnection(String serverAddress, int port);
 
     /**
      * Returns a new instance of an authenticated client connection
      *
-     * @param serverddress The address of the server we should connect to
+     * @param serverAddress The address of the server we should connect to
      * @param port         The port we should use to connect
      * @param key          The key to authenticate with, this should be the same as the one on the server-side
      * @return The Authenticated Client Connection
      */
-    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverddress, int port, char[] key);
+    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverAddress, int port, char[] key);
 
     /**
      * Returns a new instance of a server connection
      *
-     * @param clientddress The address of the client which we will accept connections from (null or empty string to allow any address)
+     * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
      * @param port         The port we should listen on
      * @return The Server Connection
      */
-    public ServerConnection newServerConnection(String clientddress, int port);
+    public ServerConnection newServerConnection(String clientAddress, int port);
 
     /**
      * Returns a new instance of an authenticated server connection
      *
-     * @param clientddress The address of the client which we will accept connections from (null or empty string to allow any address)
+     * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
      * @param port         The port we should listen on
      * @param key          The key to authenticate with, this will be matched against the clients version
      * @return The Authenticated Server Connection
      */
-    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientddress, int port, char[] key);
+    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientAddress, int port, char[] key);
 
     /**
      * Registers an instance as being a listener, any packets received from linked Connection will be passed to applicable methods

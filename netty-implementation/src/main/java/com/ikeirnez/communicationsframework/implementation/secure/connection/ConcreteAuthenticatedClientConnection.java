@@ -26,10 +26,10 @@ public class ConcreteAuthenticatedClientConnection extends ConcreteAuthenticated
     public final Bootstrap bootstrap = new Bootstrap();
     private final EventLoopGroup group = new NioEventLoopGroup();
 
-    public ConcreteAuthenticatedClientConnection(ConcreteConnectionManager connectionManager, String serverddress, int port, char[] key) {
-        super(connectionManager, serverddress, port, key);
+    public ConcreteAuthenticatedClientConnection(ConcreteConnectionManager connectionManager, String serverAddress, int port, char[] key) {
+        super(connectionManager, serverAddress, port, key);
 
-        if (serverddress == null || serverddress.isEmpty()) {
+        if (serverAddress == null || serverAddress.isEmpty()) {
             throw new UnsupportedOperationException("Server Address cannot be null or empty");
         }
 

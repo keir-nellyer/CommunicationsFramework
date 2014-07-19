@@ -21,6 +21,7 @@ This project was also I way for me to learn how to use the Netty API and it has 
 * ConnectionBuilder to customize each aspect of the connection
 * Default options set in ConnectionManager, applied to each connection when created
 * Better way of handling very simple packets
+* Allow custom executors to be set, in the case of BungeeCord (http://stackoverflow.com/a/21717658/1870318)
 
 ## Usage
 
