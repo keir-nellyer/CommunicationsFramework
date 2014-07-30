@@ -2,11 +2,17 @@ package com.ikeirnez.communicationsframework.examples.authentication.server;
 
 import com.ikeirnez.communicationsframework.api.Callback;
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.api.connection.AuthenticatedServerConnection;
+import com.ikeirnez.communicationsframework.api.authentication.SimpleConnectionAuthentication;
+import com.ikeirnez.communicationsframework.api.config.connection.ServerConnectionConfig;
 import com.ikeirnez.communicationsframework.api.connection.Connection;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory;
+import com.ikeirnez.communicationsframework.api.connection.ServerConnection;
+import com.ikeirnez.communicationsframework.api.filter.SimpleWhitelistConnectionFilter;
 import com.ikeirnez.communicationsframework.examples.authentication.Common;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * A dummy server to demonstrate authentication usage
@@ -15,8 +21,8 @@ import com.ikeirnez.communicationsframework.examples.authentication.Common;
 public class AuthenticatedServerExampleMain {
 
     public ConnectionManager connectionManager = ConnectionManagerFactory.getNewNettyConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
-    public AuthenticatedServerConnection connection;
-    public AuthenticatedServerExampleMain(String host, int port, char[] key) {
+    public ServerConnection connection;
+    public AuthenticatedServerExampleMain(String host, int port, String key) {
         // its a good idea to register hooks and listeners before attempting the connection
         // this is due to read and writes being handled asynchronously and therefore we might
         // not register everything in time
@@ -37,8 +43,16 @@ public class AuthenticatedServerExampleMain {
 
         connectionManager.registerListener(new AuthenticatedServerExampleListener()); // register listener for incoming test packet
 
-        connection = connectionManager.newAuthenticatedServerConnection(host, port, key); // create the connection instance and populate it with our data
-        connection.bind(); // begin listening for incoming connections
+        ServerConnectionConfig config = new ServerConnectionConfig(port);
+
+        try {
+            config.setConnectionFilter(new SimpleWhitelistConnectionFilter(InetAddress.getByName(host)));
+            config.setAuthentication(new SimpleConnectionAuthentication(key));
+            connection = connectionManager.newServerConnection(config); // create the connection instance and populate it with our data
+            connection.bind(); // begin listening for incoming connections
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

@@ -4,6 +4,7 @@ import com.ikeirnez.communicationsframework.api.connection.Connection;
 import com.ikeirnez.communicationsframework.api.packets.Packet;
 import com.ikeirnez.communicationsframework.implementation.ConcreteConnectionManager;
 import com.ikeirnez.communicationsframework.implementation.handlers.PacketHandler;
+import io.netty.channel.Channel;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -21,21 +22,16 @@ public abstract class ConcreteConnection implements Connection {
     public final Logger logger;
     public final List<Packet> connectQueue = Collections.synchronizedList(new ArrayList<Packet>()); // packets to be sent when connection is (re)gained
     protected final ConcreteConnectionManager connectionManager;
-    private final InetSocketAddress socketAddress;
-    private final String hostName;
-    private final int port;
     public PacketHandler packetHandler = null;
+    public AtomicBoolean authenticated = new AtomicBoolean(false);
     public AtomicBoolean firstConnect = new AtomicBoolean(true);
     public AtomicBoolean closing = new AtomicBoolean(false), expectingDisconnect = new AtomicBoolean(false);
 
-    public ConcreteConnection(ConcreteConnectionManager connectionManager, String hostName, int port) {
+    public ConcreteConnection(ConcreteConnectionManager connectionManager, Logger logger) {
         this.connectionManager = connectionManager;
-        this.hostName = hostName;
-        this.port = port;
-        socketAddress = new InetSocketAddress(hostName, port);
+        this.logger = logger;
 
         connectionManager.connections.add(this);
-        logger = Logger.getLogger("Connection (" + hostName + ":" + port + ")");
     }
 
     @Override
@@ -83,18 +79,9 @@ public abstract class ConcreteConnection implements Connection {
         return connectionManager;
     }
 
-    @Override
-    public InetSocketAddress getSocketAddress() {
-        return socketAddress;
-    }
-
-    @Override
-    public String getHostName() {
-        return hostName;
-    }
-
-    @Override
-    public int getPort() {
-        return port;
+    public final class Unsafe {
+        public Channel getChannel(){
+            return packetHandler.ctx == null ? null : packetHandler.ctx.channel();
+        }
     }
 }

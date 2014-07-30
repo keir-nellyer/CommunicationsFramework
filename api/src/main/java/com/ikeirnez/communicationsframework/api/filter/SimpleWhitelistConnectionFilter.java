@@ -1,4 +1,4 @@
-package com.ikeirnez.communicationsframework.api.config.filter;
+package com.ikeirnez.communicationsframework.api.filter;
 
 import com.ikeirnez.communicationsframework.api.connection.ServerConnection;
 
@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A simple whitelist implementation of {@link com.ikeirnez.communicationsframework.api.config.filter.ConnectionFilter}
+ * A simple whitelist implementation of {@link com.ikeirnez.communicationsframework.api.filter.ConnectionFilter}
  * If the client address is contained
  */
 public class SimpleWhitelistConnectionFilter implements ConnectionFilter {
@@ -40,4 +40,5 @@ public class SimpleWhitelistConnectionFilter implements ConnectionFilter {
     public boolean shouldAccept(ServerConnection serverConnection, InetAddress incomingConnectionAddress) {
         return whitelist.contains(incomingConnectionAddress);
     }
+
 }

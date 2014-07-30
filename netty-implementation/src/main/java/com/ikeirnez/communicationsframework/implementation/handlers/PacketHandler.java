@@ -1,9 +1,11 @@
 package com.ikeirnez.communicationsframework.implementation.handlers;
 
 import com.ikeirnez.communicationsframework.api.HookType;
+import com.ikeirnez.communicationsframework.api.filter.ConnectionFilter;
 import com.ikeirnez.communicationsframework.api.packets.Packet;
 import com.ikeirnez.communicationsframework.implementation.packets.PacketDisconnect;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -11,6 +13,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 /**
@@ -19,7 +22,7 @@ import java.net.InetSocketAddress;
 public class PacketHandler extends ChannelInboundHandlerAdapter implements Closeable {
 
     private final ConcreteConnection connection;
-    private ChannelHandlerContext ctx = null;
+    public ChannelHandlerContext ctx = null;
 
     public PacketHandler(ConcreteConnection connection) {
         this.connection = connection;
@@ -27,11 +30,18 @@ public class PacketHandler extends ChannelInboundHandlerAdapter implements Close
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        if (connection.getHostName() != null && !connection.getHostName().isEmpty() && !connection.getSocketAddress().isUnresolved()
-                && !((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress().equalsIgnoreCase(connection.getSocketAddress().getAddress().getHostAddress())) {
-            connection.closing.set(true);
-            ctx.channel().disconnect();
-            return;
+        if (connection instanceof ConcreteServerConnection){ // todo move this elsewhere
+            ConcreteServerConnection serverConnection = (ConcreteServerConnection) connection;
+            ConnectionFilter connectionFilter = serverConnection.getConnectionConfig().getConnectionFilter();
+            InetAddress incomingAddress = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress();
+
+            if (connectionFilter != null && !connectionFilter.shouldAccept(serverConnection, incomingAddress)){ // disconnect if connection filter says no
+                connection.closing.set(true);
+                ctx.channel().disconnect();
+                return;
+            } else {
+                serverConnection.currentlyConnectedTo = incomingAddress;
+            }
         }
 
         this.ctx = ctx;

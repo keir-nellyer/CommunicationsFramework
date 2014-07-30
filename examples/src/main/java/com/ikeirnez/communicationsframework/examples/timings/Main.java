@@ -2,6 +2,8 @@ package com.ikeirnez.communicationsframework.examples.timings;
 
 import com.ikeirnez.communicationsframework.api.Callback;
 import com.ikeirnez.communicationsframework.api.HookType;
+import com.ikeirnez.communicationsframework.api.config.connection.ClientConnectionConfig;
+import com.ikeirnez.communicationsframework.api.config.connection.ServerConnectionConfig;
 import com.ikeirnez.communicationsframework.api.connection.ClientConnection;
 import com.ikeirnez.communicationsframework.api.connection.Connection;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
@@ -10,6 +12,7 @@ import com.ikeirnez.communicationsframework.api.connection.ServerConnection;
 import com.ikeirnez.communicationsframework.examples.timings.threads.PacketDispatchThread;
 import com.ikeirnez.communicationsframework.examples.timings.threads.ProgressMonitorThread;
 
+import java.net.InetSocketAddress;
 import java.text.NumberFormat;
 
 /**
@@ -22,8 +25,8 @@ public class Main {
     public static final NumberFormat numberFormatGeneral = NumberFormat.getNumberInstance(); // for display things without decimals
 
     public static ConnectionManager connectionManager = ConnectionManagerFactory.getNewNettyConnectionManager(Main.class.getClassLoader());
-    public static ServerConnection serverConnection = connectionManager.newServerConnection("localhost", 25565);
-    public static ClientConnection clientConnection = connectionManager.newClientConnection("localhost", 25565);
+    public static ServerConnection serverConnection = connectionManager.newServerConnection(new ServerConnectionConfig(25565));
+    public static ClientConnection clientConnection = connectionManager.newClientConnection(new ClientConnectionConfig(new InetSocketAddress("localhost", 25565)));
 
     static { // set number format options
         numberFormatDecimal.setMaximumFractionDigits(2);

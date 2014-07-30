@@ -1,4 +1,4 @@
-package com.ikeirnez.communicationsframework.implementation.secure.packets;
+package com.ikeirnez.communicationsframework.implementation.authentication;
 
 import com.ikeirnez.communicationsframework.api.packets.Packet;
 

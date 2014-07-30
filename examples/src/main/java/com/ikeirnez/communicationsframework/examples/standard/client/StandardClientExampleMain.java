@@ -2,11 +2,14 @@ package com.ikeirnez.communicationsframework.examples.standard.client;
 
 import com.ikeirnez.communicationsframework.api.Callback;
 import com.ikeirnez.communicationsframework.api.HookType;
+import com.ikeirnez.communicationsframework.api.config.connection.ClientConnectionConfig;
 import com.ikeirnez.communicationsframework.api.connection.ClientConnection;
 import com.ikeirnez.communicationsframework.api.connection.Connection;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory;
 import com.ikeirnez.communicationsframework.examples.PacketTest;
+
+import java.net.InetSocketAddress;
 
 /**
  * A dummy client to demonstrate standard usage
@@ -31,7 +34,7 @@ public class StandardClientExampleMain {
 
         connectionManager.registerListener(new StandardClientExampleListener()); // register listener for reply
 
-        connection = connectionManager.newClientConnection(host, port); // create the connection instance and populate it with our data
+        connection = connectionManager.newClientConnection(new ClientConnectionConfig(new InetSocketAddress(host, port))); // create the connection instance and populate it with our data
         connection.connect(); // attempt connecting asynchronously
         connection.sendPacket(new PacketTest("Hey, this message was sent from the client")); // send a packet to the server
     }

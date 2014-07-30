@@ -2,6 +2,8 @@ package com.ikeirnez.communicationsframework.api.connection;
 
 import com.ikeirnez.communicationsframework.api.Callback;
 import com.ikeirnez.communicationsframework.api.HookType;
+import com.ikeirnez.communicationsframework.api.config.connection.ClientConnectionConfig;
+import com.ikeirnez.communicationsframework.api.config.connection.ServerConnectionConfig;
 import com.ikeirnez.communicationsframework.api.packets.PacketListener;
 
 import java.io.Closeable;
@@ -22,42 +24,20 @@ public interface ConnectionManager extends Closeable {
     public List<Connection> getConnections();
 
     /**
-     * Returns a new instance of a client connection
+     * Creates a new client connection.
      *
-     * @param serverAddress The address of the server we should connect to
-     * @param port         The port we should use to connect
-     * @return The Client Connection
+     * @param clientConnectionConfig the configuration for the connection
+     * @return the connection
      */
-    public ClientConnection newClientConnection(String serverAddress, int port);
+    public ClientConnection newClientConnection(ClientConnectionConfig clientConnectionConfig);
 
     /**
-     * Returns a new instance of an authenticated client connection
+     * Creates a new server connection.
      *
-     * @param serverAddress The address of the server we should connect to
-     * @param port         The port we should use to connect
-     * @param key          The key to authenticate with, this should be the same as the one on the server-side
-     * @return The Authenticated Client Connection
+     * @param serverConnectionConfig the configuration for the connection
+     * @return the connection
      */
-    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverAddress, int port, char[] key);
-
-    /**
-     * Returns a new instance of a server connection
-     *
-     * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
-     * @param port         The port we should listen on
-     * @return The Server Connection
-     */
-    public ServerConnection newServerConnection(String clientAddress, int port);
-
-    /**
-     * Returns a new instance of an authenticated server connection
-     *
-     * @param clientAddress The address of the client which we will accept connections from (null or empty string to allow any address)
-     * @param port         The port we should listen on
-     * @param key          The key to authenticate with, this will be matched against the clients version
-     * @return The Authenticated Server Connection
-     */
-    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientAddress, int port, char[] key);
+    public ServerConnection newServerConnection(ServerConnectionConfig serverConnectionConfig);
 
     /**
      * Registers an instance as being a listener, any packets received from linked Connection will be passed to applicable methods

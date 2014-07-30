@@ -1,9 +1,13 @@
 package com.ikeirnez.communicationsframework.implementation.standard.handlers;
 
+import com.ikeirnez.communicationsframework.api.authentication.ConnectionAuthentication;
+import com.ikeirnez.communicationsframework.api.authentication.SimpleConnectionAuthentication;
 import com.ikeirnez.communicationsframework.implementation.handlers.BasicHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.PacketHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.ReconnectHandler;
+import com.ikeirnez.communicationsframework.implementation.authentication.simple.SimpleAuthServerHandler;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -47,6 +51,23 @@ public class StandardInitializer extends ChannelInitializer<SocketChannel> {
         ChannelPipeline channelPipeline = socketChannel.pipeline();
 
         addObjectHandlers(connection, channelPipeline);
+
+        ConnectionAuthentication authentication = connection.getConnectionConfig().getAuthentication(); // todo below is all VERY ugly :(
+        if (authentication != null){
+            switch (connection.getConnectionType()){
+                default: break;
+                case SERVER:
+                    if (authentication instanceof SimpleConnectionAuthentication){
+                        channelPipeline.addLast(new SimpleAuthServerHandler((ConcreteServerConnection) connection, (SimpleConnectionAuthentication) authentication));
+                    }
+
+                    break;
+                case CLIENT:
+
+                    break;
+            }
+        }
+
         addOthers(connection, channelPipeline);
     }
 }

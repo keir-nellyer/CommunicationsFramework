@@ -2,15 +2,13 @@ package com.ikeirnez.communicationsframework.implementation;
 
 import com.ikeirnez.communicationsframework.api.Callback;
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.api.connection.AuthenticatedClientConnection;
-import com.ikeirnez.communicationsframework.api.connection.AuthenticatedServerConnection;
+import com.ikeirnez.communicationsframework.api.config.connection.ClientConnectionConfig;
+import com.ikeirnez.communicationsframework.api.config.connection.ServerConnectionConfig;
 import com.ikeirnez.communicationsframework.api.connection.Connection;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
 import com.ikeirnez.communicationsframework.api.packets.Packet;
 import com.ikeirnez.communicationsframework.api.packets.PacketHandler;
 import com.ikeirnez.communicationsframework.api.packets.PacketListener;
-import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedClientConnection;
-import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedServerConnection;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteClientConnection;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
@@ -50,23 +48,13 @@ public class ConcreteConnectionManager implements ConnectionManager {
     }
 
     @Override
-    public ConcreteClientConnection newClientConnection(String serverAddress, int port) {
-        return new ConcreteClientConnection(this, serverAddress, port);
+    public ConcreteClientConnection newClientConnection(ClientConnectionConfig clientConnectionConfig) {
+        return new ConcreteClientConnection(this, clientConnectionConfig);
     }
 
     @Override
-    public AuthenticatedClientConnection newAuthenticatedClientConnection(String serverAddress, int port, char[] key) {
-        return new ConcreteAuthenticatedClientConnection(this, serverAddress, port, key);
-    }
-
-    @Override
-    public ConcreteServerConnection newServerConnection(String clientAddress, int port) {
-        return new ConcreteServerConnection(this, clientAddress, port);
-    }
-
-    @Override
-    public AuthenticatedServerConnection newAuthenticatedServerConnection(String clientAddress, int port, char[] key) {
-        return new ConcreteAuthenticatedServerConnection(this, clientAddress, port, key);
+    public ConcreteServerConnection newServerConnection(ServerConnectionConfig serverConnectionConfig) {
+        return new ConcreteServerConnection(this, serverConnectionConfig);
     }
 
     @Override

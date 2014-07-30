@@ -1,4 +1,4 @@
-package com.ikeirnez.communicationsframework.api.config.filter;
+package com.ikeirnez.communicationsframework.api.filter;
 
 import com.ikeirnez.communicationsframework.api.connection.ServerConnection;
 
@@ -7,7 +7,7 @@ import java.net.InetAddress;
 /**
  * Interface for allowing or disallowing incoming connections.
  */
-@FunctionalInterface
+//@FunctionInterface
 public interface ConnectionFilter {
 
     /**

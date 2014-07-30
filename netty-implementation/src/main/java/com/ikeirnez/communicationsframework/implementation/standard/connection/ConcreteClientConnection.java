@@ -1,6 +1,8 @@
 package com.ikeirnez.communicationsframework.implementation.standard.connection;
 
+import com.ikeirnez.communicationsframework.api.config.connection.ClientConnectionConfig;
 import com.ikeirnez.communicationsframework.api.connection.ClientConnection;
+import com.ikeirnez.communicationsframework.api.connection.ConnectionType;
 import com.ikeirnez.communicationsframework.implementation.ConcreteConnectionManager;
 import com.ikeirnez.communicationsframework.implementation.standard.handlers.StandardInitializer;
 import io.netty.bootstrap.Bootstrap;
@@ -12,7 +14,10 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 /**
  * Created by iKeirNez on 04/04/2014.
@@ -22,17 +27,27 @@ public class ConcreteClientConnection extends ConcreteConnection implements Clie
     public final Bootstrap bootstrap = new Bootstrap();
     private final EventLoopGroup group = new NioEventLoopGroup();
 
-    public ConcreteClientConnection(ConcreteConnectionManager connectionManager, String serverAddress, int port) {
-        super(connectionManager, serverAddress, port);
+    private final ClientConnectionConfig connectionConfig;
 
-        if (serverAddress == null || serverAddress.isEmpty()) {
-            throw new UnsupportedOperationException("Server Address cannot be null or empty");
-        }
+    public ConcreteClientConnection(ConcreteConnectionManager connectionManager, ClientConnectionConfig connectionConfig) {
+        super(connectionManager, Logger.getLogger("Client Connection (" + connectionConfig.getServerAddress().toString() + ")"));
+
+        this.connectionConfig = connectionConfig;
 
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
                 .handler(new StandardInitializer(this))
-                .remoteAddress(getSocketAddress());
+                .remoteAddress(connectionConfig.getServerAddress());
+    }
+
+    @Override
+    public ClientConnectionConfig getConnectionConfig() {
+        return connectionConfig;
+    }
+
+    @Override
+    public ConnectionType getConnectionType() {
+        return ConnectionType.CLIENT;
     }
 
     @Override
@@ -49,7 +64,7 @@ public class ConcreteClientConnection extends ConcreteConnection implements Clie
                             }
                         }, 1, TimeUnit.SECONDS);
                     } else {
-                        throw new Exception("Error whilst connecting to " + getSocketAddress(), f.cause());
+                        throw new Exception("Error whilst connecting to " + connectionConfig.getServerAddress(), f.cause());
                     }
                 }
             }

@@ -1,5 +1,7 @@
 package com.ikeirnez.communicationsframework.implementation.standard.connection;
 
+import com.ikeirnez.communicationsframework.api.config.connection.ServerConnectionConfig;
+import com.ikeirnez.communicationsframework.api.connection.ConnectionType;
 import com.ikeirnez.communicationsframework.api.connection.ServerConnection;
 import com.ikeirnez.communicationsframework.implementation.ConcreteConnectionManager;
 import com.ikeirnez.communicationsframework.implementation.standard.handlers.StandardInitializer;
@@ -11,6 +13,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.logging.Logger;
 
 /**
  * Created by iKeirNez on 04/04/2014.
@@ -21,13 +25,34 @@ public class ConcreteServerConnection extends ConcreteConnection implements Serv
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-    public ConcreteServerConnection(ConcreteConnectionManager connectionManager, String clientHostname, int port) {
-        super(connectionManager, clientHostname, port);
+    public InetAddress currentlyConnectedTo;
+
+    private final ServerConnectionConfig connectionConfig;
+
+    public ConcreteServerConnection(ConcreteConnectionManager connectionManager, ServerConnectionConfig connectionConfig) {
+        super(connectionManager, Logger.getLogger("Server Connection (" + connectionConfig.getPort() + ")"));
+
+        this.connectionConfig = connectionConfig;
 
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new StandardInitializer(this))
-                .localAddress("", getSocketAddress().getPort());
+                .localAddress("", connectionConfig.getPort());
+    }
+
+    @Override
+    public ServerConnectionConfig getConnectionConfig() {
+        return connectionConfig;
+    }
+
+    @Override
+    public ConnectionType getConnectionType() {
+        return ConnectionType.SERVER;
+    }
+
+    @Override
+    public InetAddress getConnectedClient() {
+        return currentlyConnectedTo;
     }
 
     public void bind() {
@@ -35,7 +60,7 @@ public class ConcreteServerConnection extends ConcreteConnection implements Serv
             @Override
             public void operationComplete(ChannelFuture f) throws Exception {
                 if (!f.isSuccess()) {
-                    throw new Exception("Error whilst binding port for: " + getSocketAddress(), f.cause());
+                    throw new Exception("Error whilst binding port: " + connectionConfig.getPort(), f.cause());
                 }
             }
         });

@@ -1,40 +1,49 @@
 package com.ikeirnez.communicationsframework.api.config;
 
-import com.ikeirnez.communicationsframework.api.config.connections.DefaultConnectionConfig;
+import org.apache.commons.lang3.Validate;
 
 /**
- * Created by iKeirNez on 15/07/2014.
+ * Created by iKeirNez on 30/07/2014.
  */
 public class ConnectionManagerConfig {
 
-    private DefaultConnectionConfig defaultConnectionConfig;
+    private ClassLoader classLoader;
 
-    public ConnectionManagerConfig(){}
-
-    protected ConnectionManagerConfig(Builder builder){
-        setDefaultConnectionConfig(defaultConnectionConfig);
+    /**
+     * Creates a new instance.
+     *
+     * @param classLoader The ClassLoader used for decoding packets into objects.
+     */
+    public ConnectionManagerConfig(ClassLoader classLoader){
+        this.classLoader = classLoader;
     }
 
-    public DefaultConnectionConfig getDefaultConnectionConfig() {
-        return defaultConnectionConfig;
+    public ClassLoader getClassLoader() {
+        return classLoader;
     }
 
-    public void setDefaultConnectionConfig(DefaultConnectionConfig defaultConnectionConfig) {
-        this.defaultConnectionConfig = defaultConnectionConfig;
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 
     public static class Builder {
-        private DefaultConnectionConfig defaultConnectionConfig;
+        private ClassLoader classLoader;
 
-        protected Builder(){}
+        public Builder withClassLoader(ClassLoader classLoader){
+            this.classLoader = classLoader;
+            return this;
+        }
 
-        public Builder withDefaultConnectionConfig(DefaultConnectionConfig defaultConnectionConfig){
-            this.defaultConnectionConfig = defaultConnectionConfig;
+        public Builder withConnectionDefaults(){ // todo
+
             return this;
         }
 
         public ConnectionManagerConfig build(){
-            return new ConnectionManagerConfig(this);
+            Validate.notNull(classLoader, "ClassLoader cannot be null.7");
+            ConnectionManagerConfig connectionManagerConfig = new ConnectionManagerConfig(classLoader);
+            // todo defaults
+            return connectionManagerConfig;
         }
     }
 }

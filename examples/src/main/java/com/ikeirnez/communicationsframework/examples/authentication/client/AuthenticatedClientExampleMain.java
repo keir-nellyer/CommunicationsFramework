@@ -2,12 +2,16 @@ package com.ikeirnez.communicationsframework.examples.authentication.client;
 
 import com.ikeirnez.communicationsframework.api.Callback;
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.api.connection.AuthenticatedClientConnection;
+import com.ikeirnez.communicationsframework.api.authentication.SimpleConnectionAuthentication;
+import com.ikeirnez.communicationsframework.api.config.connection.ClientConnectionConfig;
+import com.ikeirnez.communicationsframework.api.connection.ClientConnection;
 import com.ikeirnez.communicationsframework.api.connection.Connection;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManager;
 import com.ikeirnez.communicationsframework.api.connection.ConnectionManagerFactory;
 import com.ikeirnez.communicationsframework.examples.PacketTest;
 import com.ikeirnez.communicationsframework.examples.authentication.Common;
+
+import java.net.InetSocketAddress;
 
 /**
  * A dummy client to demonstrate authentication usage
@@ -16,8 +20,8 @@ import com.ikeirnez.communicationsframework.examples.authentication.Common;
 public class AuthenticatedClientExampleMain {
 
     public ConnectionManager connectionManager = ConnectionManagerFactory.getNewNettyConnectionManager(getClass().getClassLoader()); // create a ConnectionManager to manage our connections
-    public AuthenticatedClientConnection connection;
-    public AuthenticatedClientExampleMain(String host, int port, char[] key) {
+    public ClientConnection connection;
+    public AuthenticatedClientExampleMain(String host, int port, String key) {
         // its a good idea to register hooks and listeners before attempting the connection
         // this is due to read and writes being handled asynchronously and therefore we might
         // not register everything in time
@@ -38,7 +42,9 @@ public class AuthenticatedClientExampleMain {
 
         connectionManager.registerListener(new AuthenticationClientExampleListener()); // register listener for reply
 
-        connection = connectionManager.newAuthenticatedClientConnection(host, port, key); // create the connection instance and populate it with our data
+        ClientConnectionConfig config = new ClientConnectionConfig(new InetSocketAddress(host, port));
+        config.setAuthentication(new SimpleConnectionAuthentication(key));
+        connection = connectionManager.newClientConnection(config); // create the connection instance and populate it with our data
         connection.connect(); // attempt connecting asynchronously
         connection.sendPacket(new PacketTest("Hey, this message was sent from the client")); // send a packet to the server
     }

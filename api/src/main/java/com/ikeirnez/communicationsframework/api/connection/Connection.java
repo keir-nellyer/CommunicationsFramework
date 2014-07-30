@@ -1,9 +1,10 @@
 package com.ikeirnez.communicationsframework.api.connection;
 
+import com.ikeirnez.communicationsframework.api.authentication.ConnectionAuthentication;
+import com.ikeirnez.communicationsframework.api.config.connection.ConnectionConfig;
 import com.ikeirnez.communicationsframework.api.packets.Packet;
 
 import java.io.Closeable;
-import java.net.InetSocketAddress;
 
 /**
  * Represents a connection.
@@ -13,32 +14,25 @@ import java.net.InetSocketAddress;
 public interface Connection extends Closeable {
 
     /**
+     * Gets the configuration for this connection.
+     *
+     * @return the configuration for this connection
+     */
+    public ConnectionConfig getConnectionConfig();
+
+    /**
+     * Gets the type of connection this is.
+     *
+     * @return the type of connection this is
+     */
+    public ConnectionType getConnectionType();
+
+    /**
      * Gets the connected state of this connection
      *
      * @return The connected state
      */
     public boolean isConnected();
-
-    /**
-     * Gets the address that this Connection will connect to (hostname may be null in some ServerConnection cases)
-     *
-     * @return The address that this Connection will connect to/listen for
-     */
-    public InetSocketAddress getSocketAddress();
-
-    /**
-     * Gets the hostname that this Connection will connect to (may be null in some ServerConnection instances)
-     *
-     * @return The address that this Connection will connect to
-     */
-    public String getHostName();
-
-    /**
-     * Gets the port this Connection will use for the connection
-     *
-     * @return The port
-     */
-    public int getPort();
 
     /**
      * Sends a packet via this connection to the other side

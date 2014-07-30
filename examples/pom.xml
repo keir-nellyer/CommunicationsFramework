@@ -14,9 +14,14 @@
     <name>CommunicationsFramework Examples</name>
 
     <dependencies>
-        <dependency>
+        <dependency> <!-- had to add this too because Maven didn't like just the implementation -->
             <groupId>com.ikeirnez.communicationsframework</groupId>
             <artifactId>api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ikeirnez.communicationsframework</groupId>
+            <artifactId>netty-implementation</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

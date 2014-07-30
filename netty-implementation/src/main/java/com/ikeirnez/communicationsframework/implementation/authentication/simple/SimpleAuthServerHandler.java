@@ -1,23 +1,23 @@
-package com.ikeirnez.communicationsframework.implementation.secure.handlers;
+package com.ikeirnez.communicationsframework.implementation.authentication.simple;
 
 import com.ikeirnez.communicationsframework.api.HookType;
-import com.ikeirnez.communicationsframework.implementation.secure.connection.ConcreteAuthenticatedServerConnection;
-import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticate;
-import com.ikeirnez.communicationsframework.implementation.secure.packets.PacketAuthenticationStatus;
+import com.ikeirnez.communicationsframework.api.authentication.SimpleConnectionAuthentication;
+import com.ikeirnez.communicationsframework.implementation.authentication.PacketAuthenticationStatus;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-
-import java.util.Arrays;
 
 /**
  * Created by iKeirNez on 27/04/2014.
  */
-public class AuthenticatedServerHandler extends ChannelInboundHandlerAdapter {
+public class SimpleAuthServerHandler extends ChannelInboundHandlerAdapter {
 
-    private ConcreteAuthenticatedServerConnection connection;
+    private ConcreteServerConnection connection;
+    private SimpleConnectionAuthentication authentication;
 
-    public AuthenticatedServerHandler(ConcreteAuthenticatedServerConnection connection) {
+    public SimpleAuthServerHandler(ConcreteServerConnection connection, SimpleConnectionAuthentication authentication) {
         this.connection = connection;
+        this.authentication = authentication;
     }
 
     @Override
@@ -30,9 +30,9 @@ public class AuthenticatedServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (!connection.authenticated.get()) {
-            if (msg instanceof PacketAuthenticate) {
-                PacketAuthenticate packet = (PacketAuthenticate) msg;
-                connection.authenticated.set(Arrays.equals(packet.getKey(), connection.key));
+            if (msg instanceof PacketSimpleAuthenticate) {
+                PacketSimpleAuthenticate packet = (PacketSimpleAuthenticate) msg;
+                connection.authenticated.set(packet.getKey().equals(authentication.getKey()));
                 ctx.writeAndFlush(new PacketAuthenticationStatus(connection.authenticated.get()));
 
                 if (connection.authenticated.get()) {
