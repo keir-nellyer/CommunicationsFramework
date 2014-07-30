@@ -14,9 +14,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 /**

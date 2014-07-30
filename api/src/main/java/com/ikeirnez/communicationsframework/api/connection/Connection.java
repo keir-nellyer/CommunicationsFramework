@@ -1,6 +1,5 @@
 package com.ikeirnez.communicationsframework.api.connection;
 
-import com.ikeirnez.communicationsframework.api.authentication.ConnectionAuthentication;
 import com.ikeirnez.communicationsframework.api.config.connection.ConnectionConfig;
 import com.ikeirnez.communicationsframework.api.packets.Packet;
 

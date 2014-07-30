@@ -7,7 +7,6 @@ import com.ikeirnez.communicationsframework.implementation.handlers.PacketHandle
 import io.netty.channel.Channel;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
