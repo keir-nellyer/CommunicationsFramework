@@ -8,7 +8,7 @@
         <version>3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
+N
     <artifactId>examples</artifactId>
 
     <name>CommunicationsFramework Examples</name>

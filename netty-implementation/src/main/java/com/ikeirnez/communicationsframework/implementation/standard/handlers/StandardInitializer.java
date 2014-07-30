@@ -2,10 +2,12 @@ package com.ikeirnez.communicationsframework.implementation.standard.handlers;
 
 import com.ikeirnez.communicationsframework.api.authentication.ConnectionAuthentication;
 import com.ikeirnez.communicationsframework.api.authentication.SimpleConnectionAuthentication;
+import com.ikeirnez.communicationsframework.implementation.authentication.simple.SimpleAuthClientHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.BasicHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.PacketHandler;
 import com.ikeirnez.communicationsframework.implementation.handlers.ReconnectHandler;
 import com.ikeirnez.communicationsframework.implementation.authentication.simple.SimpleAuthServerHandler;
+import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteClientConnection;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
 import io.netty.channel.ChannelInitializer;
@@ -63,6 +65,9 @@ public class StandardInitializer extends ChannelInitializer<SocketChannel> {
 
                     break;
                 case CLIENT:
+                    if (authentication instanceof SimpleConnectionAuthentication){
+                        channelPipeline.addLast(new SimpleAuthClientHandler((ConcreteClientConnection) connection, (SimpleConnectionAuthentication) authentication));
+                    }
 
                     break;
             }
