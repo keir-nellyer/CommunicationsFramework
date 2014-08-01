@@ -1,7 +1,5 @@
 package com.ikeirnez.communicationsframework.api.config;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * Created by iKeirNez on 30/07/2014.
  */
@@ -40,7 +38,10 @@ public class ConnectionManagerConfig {
         }
 
         public ConnectionManagerConfig build(){
-            Validate.notNull(classLoader, "ClassLoader cannot be null.7");
+            if (classLoader == null){
+                throw new RuntimeException("ClassLoader cannot be null");
+            }
+
             ConnectionManagerConfig connectionManagerConfig = new ConnectionManagerConfig(classLoader);
             // todo defaults
             return connectionManagerConfig;

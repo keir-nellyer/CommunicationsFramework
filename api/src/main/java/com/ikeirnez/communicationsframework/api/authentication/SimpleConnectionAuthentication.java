@@ -1,7 +1,5 @@
 package com.ikeirnez.communicationsframework.api.authentication;
 
-import org.apache.commons.lang3.Validate;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,7 +13,10 @@ public class SimpleConnectionAuthentication implements ConnectionAuthentication 
 
     public SimpleConnectionAuthentication(String key){
         try {
-            Validate.notNull(key, "Password cannot be null.");
+            if (key == null){
+                throw new RuntimeException("Key cannot be null");
+            }
+
             this.key = new String(MessageDigest.getInstance("SHA-256").digest(key.getBytes("UTF-8")));
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             throw new RuntimeException("Error whilst encrypting password for authentication", e);
