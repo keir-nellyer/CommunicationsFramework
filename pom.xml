@@ -24,17 +24,6 @@
         </developer>
     </developers>
 
-    <distributionManagement>
-        <repository>
-            <id>drtshock-repo</id>
-            <url>http://ci.drtshock.com/plugin/repository/everything/</url>
-        </repository>
-        <snapshotRepository>
-            <id>drtshock-repo</id>
-            <url>http://ci.drtshock.com/plugin/repository/everything/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <modules>
         <module>api</module>
         <module>netty-implementation</module>
