@@ -29,7 +29,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
                                     <include>com.ikeirnez.communicationsframework:api</include>

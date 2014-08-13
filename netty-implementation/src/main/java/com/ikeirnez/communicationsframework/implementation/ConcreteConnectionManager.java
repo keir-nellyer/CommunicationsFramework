@@ -12,19 +12,28 @@ import com.ikeirnez.communicationsframework.api.packets.PacketListener;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteClientConnection;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteConnection;
 import com.ikeirnez.communicationsframework.implementation.standard.connection.ConcreteServerConnection;
+import io.netty.bootstrap.ServerBootstrap;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by iKeirNez on 06/04/2014.
  */
 public class ConcreteConnectionManager implements ConnectionManager {
+
+    /*private static final Map<Integer, ServerBootstrap> cachedServers = new HashMap<>();
+
+    public static ServerBootstrap getServerBootstrap(int port){
+        if (cachedServers.containsKey(port)){
+            return cachedServers.get(port);
+        } else {
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
+
+        }
+    } todo */
 
     public final List<ConcreteConnection> connections = Collections.synchronizedList(new ArrayList<ConcreteConnection>());
     public final ClassLoader classLoader;
