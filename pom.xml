@@ -43,6 +43,13 @@
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>1.0-alpha-6</version>
+            </extension>
+        </extensions>
 
         <plugins>
             <plugin>
@@ -75,4 +82,11 @@
             </plugin>
         </plugins>
     </build>
+    
+    <distributionManagement>
+        <repository>
+            <id>turt2live-ftp</id>
+            <url>ftp://ftp.turt2live.com/public_html/maven2</url>
+        </repository>
+    </distributionManagement>
 </project>
