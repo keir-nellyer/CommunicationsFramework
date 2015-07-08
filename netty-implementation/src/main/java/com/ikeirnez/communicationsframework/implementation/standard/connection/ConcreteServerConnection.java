@@ -37,7 +37,7 @@ public class ConcreteServerConnection extends ConcreteConnection implements Serv
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new StandardInitializer(this))
-                .localAddress("", connectionConfig.getPort());
+                .localAddress(connectionConfig.getHost(), connectionConfig.getPort());
     }
 
     @Override
